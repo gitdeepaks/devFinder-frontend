@@ -1,7 +1,7 @@
+import { toast } from '@pheralb/toast';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from '@pheralb/toast';
 import { addConnection } from '../utils/connection-slice';
 import { BASE_URL } from '../utils/contstants';
 
@@ -14,48 +14,45 @@ export default function Connections() {
     try {
       setIsLoading(true);
       const response = await axios.get(`${BASE_URL}/user/connections`, { withCredentials: true });
-      console.log('Connections:', response.data);
-      
-      // Handle different response structures
-      const connectionsData = response.data?.data || response.data || [];
-      dispatch(addConnection(connectionsData));
+      const data = response.data?.data || response.data || [];
+      dispatch(addConnection(Array.isArray(data) ? data : []));
     } catch (error) {
       console.error('Error fetching connections:', error);
       toast.error({
-        text: 'Connection Error',
-        description: 'Failed to load connections. Please try again later.',
+        text: 'Couldn’t load connections',
+        description: 'Please try again later.',
       });
     } finally {
       setIsLoading(false);
     }
   };
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: reason
+  // biome-ignore lint/correctness/useExhaustiveDependencies: fetch on mount
   useEffect(() => {
     fetchConnections();
   }, []);
 
-  // Loading state
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center my-10 min-h-[400px]">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
+      <div className="flex flex-col items-center justify-center min-h-[50vh] px-4">
+        <span className="loading loading-spinner loading-lg text-primary" />
+        <p className="mt-4 text-base-content/60 font-medium">Loading connections…</p>
       </div>
     );
   }
 
-  // Check if connections is null, undefined, or not an array, or empty
   if (!connections || !Array.isArray(connections) || connections.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <header className="flex justify-center items-center mb-8">
-          <h1 className="text-3xl font-bold">Connections</h1>
+      <div className="container max-w-4xl mx-auto px-4 py-10">
+        <header className="text-center mb-10">
+          <h1 className="text-2xl font-bold">Connections</h1>
+          <p className="text-base-content/60 mt-1">People you’ve connected with</p>
         </header>
-        <div className="flex justify-center items-center my-10 min-h-[400px]">
-          <div className="text-center">
+        <div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
+          <div className="w-20 h-20 rounded-full bg-base-200 flex items-center justify-center mb-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-24 w-24 text-base-content/20 mx-auto mb-4"
+              className="h-10 w-10 text-primary/50"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -64,125 +61,77 @@ export default function Connections() {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                strokeWidth={1.5}
+                d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
               />
             </svg>
-            <p className="text-lg text-base-content/70 mb-2">No connections found</p>
-            <p className="text-sm text-base-content/50">Start connecting with other developers!</p>
           </div>
+          <h2 className="text-lg font-semibold text-base-content">No connections yet</h2>
+          <p className="mt-2 text-base-content/60 max-w-sm">
+            Discover developers and tap the heart to connect. Your connections will show up here.
+          </p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <header className="flex justify-between items-center mb-6">
-        <div className="flex items-center gap-3">
-          <h1 className="text-3xl font-bold">Connections</h1>
-          <span className="badge badge-primary badge-lg">{connections.length}</span>
-        </div>
+    <div className="container max-w-4xl mx-auto px-4 py-8">
+      <header className="flex flex-wrap items-center gap-3 mb-8">
+        <h1 className="text-2xl font-bold">Connections</h1>
+        <span className="badge badge-primary badge-lg">{connections.length}</span>
       </header>
 
-      <div className="bg-base-100 rounded-lg shadow-lg border border-base-300 overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="table">
-            <thead>
-              <tr className="bg-base-200">
-                <th className="font-semibold">Profile</th>
-                <th className="font-semibold">About</th>
-                <th className="font-semibold">Skills</th>
-              </tr>
-            </thead>
-            <tbody>
-              {connections.map((connection) => {
-                const fullName = `${connection.firstName || ''} ${connection.lastName || ''}`.trim() || 'User';
-                const about = connection.about || 'No description available.';
-                const skills = connection.skills || [];
-                const photoUrl = connection.photoUrl;
+      <div className="grid gap-4 sm:grid-cols-2">
+        {connections.map((c) => {
+          const fullName = `${c.firstName || ''} ${c.lastName || ''}`.trim() || 'Developer';
+          const about = c.about || 'No bio.';
+          const skills = c.skills || [];
+          const photoUrl = c.photoUrl;
+          const key = c._id || c.id || Math.random();
 
-                return (
-                  <tr key={connection._id || connection.id || Math.random()} className="hover:bg-base-200/50 transition-colors">
-                    <td>
-                      <div className="flex items-center gap-3">
-                        <div className="avatar">
-                          <div className="w-12 h-12 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                            {photoUrl ? (
-                              <img
-                                src={photoUrl}
-                                alt={fullName}
-                                className="w-full h-full object-cover rounded-full"
-                                onError={(e) => {
-                                  e.target.style.display = 'none';
-                                  e.target.nextElementSibling.style.display = 'flex';
-                                }}
-                              />
-                            ) : null}
-                            <div
-                              className={`w-full h-full flex items-center justify-center bg-base-300 rounded-full ${
-                                photoUrl ? 'hidden' : ''
-                              }`}
-                            >
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="h-6 w-6 text-base-content/40"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <title>No image</title>
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="1.5"
-                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                />
-                              </svg>
-                            </div>
-                          </div>
-                        </div>
-                        <div>
-                          <div className="font-semibold text-base-content">{fullName}</div>
-                          {connection.age && (
-                            <div className="text-xs text-base-content/60">
-                              {connection.age} years old
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <p className="text-sm text-base-content/70 line-clamp-2 max-w-md">
-                        {about}
-                      </p>
-                    </td>
-                    <td>
-                      {skills.length > 0 ? (
-                        <div className="flex flex-wrap gap-1">
-                          {skills.slice(0, 3).map((skill) => {
-                            const skillLabel = typeof skill === 'string' ? skill : skill.name || String(skill);
-                            const skillKey = `${connection._id || connection.id}-${skillLabel}`;
-                            return (
-                              <span key={skillKey} className="badge badge-primary badge-xs">
-                                {skillLabel}
-                              </span>
-                            );
-                          })}
-                          {skills.length > 3 && (
-                            <span className="badge badge-ghost badge-xs">+{skills.length - 3}</span>
-                          )}
-                        </div>
+          return (
+            <article
+              key={key}
+              className="card card-hover-shine bg-base-100 rounded-2xl border border-base-300/50 overflow-hidden"
+            >
+              <div className="card-body p-5">
+                <div className="flex gap-4">
+                  <div className="avatar flex-shrink-0">
+                    <div className="w-14 h-14 rounded-full ring-2 ring-primary/20 overflow-hidden bg-base-200">
+                      {photoUrl ? (
+                        <img src={photoUrl} alt={fullName} className="w-full h-full object-cover" />
                       ) : (
-                        <span className="text-xs text-base-content/40 italic">No skills</span>
+                        <div className="w-full h-full flex items-center justify-center text-lg font-bold text-base-content/40">
+                          {c.firstName?.[0]?.toUpperCase() || '?'}
+                          {c.lastName?.[0]?.toUpperCase() || ''}
+                        </div>
                       )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                    </div>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h2 className="font-semibold text-base-content truncate">{fullName}</h2>
+                    {c.age && <p className="text-sm text-base-content/50">{c.age} years old</p>}
+                    <p className="text-sm text-base-content/70 line-clamp-2 mt-1">{about}</p>
+                    {skills.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {skills.slice(0, 3).map((s) => {
+                          const label = typeof s === 'string' ? s : s.name || String(s);
+                          return (
+                            <span key={label} className="badge badge-primary badge-sm">
+                              {label}
+                            </span>
+                          );
+                        })}
+                        {skills.length > 3 && <span className="badge badge-ghost badge-sm">+{skills.length - 3}</span>}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </div>
   );

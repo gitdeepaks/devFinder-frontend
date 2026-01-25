@@ -1,13 +1,60 @@
+import { toast } from '@pheralb/toast';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { BASE_URL } from '../utils/contstants';
+import { removeFeed } from '../utils/feed-slice';
 
 export const UserCard = ({ user }) => {
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
+  const dispatch = useDispatch();
 
   const photoUrl = user?.photoUrl;
 
-  // Set image source when photoUrl changes
+  const handleSendRequest = async () => {
+    try {
+      const { data } = await axios.post(
+        `${BASE_URL}/request/status/interested/${user._id}`,
+        {},
+        { withCredentials: true }
+      );
+      dispatch(removeFeed(user._id));
+      toast.success({
+        text: 'Request sent',
+        description: data?.message || 'You’re interested! They’ll see it soon.',
+      });
+    } catch (error) {
+      console.error('Error sending request:', error);
+      toast.error({
+        text: 'Couldn’t send',
+        description: error.response?.data?.message || 'Please try again.',
+      });
+    }
+  };
+
+  const handleIgnoreRequest = async () => {
+    try {
+      const { data } = await axios.post(
+        `${BASE_URL}/request/status/ignored/${user._id}`,
+        {},
+        { withCredentials: true }
+      );
+      dispatch(removeFeed(user._id));
+      toast.success({
+        text: 'Passed',
+        description: data?.message || 'Moving on.',
+      });
+    } catch (error) {
+      console.error('Error ignoring request:', error);
+      toast.error({
+        text: 'Error',
+        description: error.response?.data?.message || 'Please try again.',
+      });
+    }
+  };
+
   useEffect(() => {
     if (photoUrl && typeof photoUrl === 'string' && photoUrl.trim() !== '') {
       setImageSrc(photoUrl.trim());
@@ -19,159 +66,135 @@ export const UserCard = ({ user }) => {
     }
   }, [photoUrl]);
 
-  if (!user) {
-    return null;
-  }
+  if (!user) return null;
 
-  const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'User';
-  const about = user.about || 'No description available.';
+  const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Developer';
+  const about = user.about || 'No bio yet.';
   const skills = user.skills || [];
-
-  const handleImageError = () => {
-    setImageError(true);
-    setImageLoaded(false);
-  };
-
-  const handleImageLoad = () => {
-    setImageLoaded(true);
-    setImageError(false);
-  };
-
   const hasValidImage = imageSrc && !imageError;
 
   return (
-    <div className="card bg-base-100 w-96 shadow-lg hover:shadow-2xl transition-all duration-300 border border-base-300 overflow-hidden group">
-      {/* Image Section */}
-      <figure className="h-64 overflow-hidden bg-gradient-to-br from-base-200 to-base-300 relative">
-        {hasValidImage ? (
-          <>
-            <img
-              src={imageSrc}
-              alt={fullName}
-              className={`w-full h-full object-cover transition-all duration-300 ${
-                imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-110'
-              } group-hover:scale-105`}
-              onError={handleImageError}
-              onLoad={handleImageLoad}
-              loading="lazy"
-            />
-            {!imageLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center bg-base-200">
-                <span className="loading loading-spinner loading-lg text-primary"></span>
+    <div className="w-full max-w-md mx-auto">
+      <article className="card card-hover-shine bg-base-100 overflow-hidden rounded-3xl shadow-2xl border border-base-300/50">
+        {/* Full-bleed image with gradient overlay — Tinder-style */}
+        <figure className="relative aspect-[3/4] min-h-[420px] overflow-hidden bg-gradient-to-br from-base-200 to-base-300">
+          {hasValidImage ? (
+            <>
+              <img
+                src={imageSrc}
+                alt={fullName}
+                className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ${
+                  imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+                }`}
+                onError={() => {
+                  setImageError(true);
+                  setImageLoaded(false);
+                }}
+                onLoad={() => {
+                  setImageLoaded(true);
+                  setImageError(false);
+                }}
+                loading="lazy"
+              />
+              {!imageLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-base-200">
+                  <span className="loading loading-spinner loading-lg text-primary" />
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center text-base-content/30">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-24 w-24 mx-auto mb-2"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <title>No photo</title>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                <p className="text-sm">No photo</p>
+              </div>
+            </div>
+          )}
+          {/* Bottom gradient overlay for name & skills */}
+          <div
+            className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent"
+            aria-hidden
+          />
+          <div className="absolute bottom-0 left-0 right-0 p-6 text-left">
+            <h2 className="text-2xl font-bold text-white drop-shadow-lg">{fullName}</h2>
+            <p className="text-white/90 text-sm mt-1 line-clamp-2">{about}</p>
+            {skills.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-3">
+                {skills.slice(0, 4).map((skill) => {
+                  const key = typeof skill === 'string' ? skill : String(skill);
+                  const label = typeof skill === 'string' ? skill : skill.name || String(skill);
+                  return (
+                    <span key={key} className="badge badge-primary badge-sm font-medium border-0 opacity-90">
+                      {label}
+                    </span>
+                  );
+                })}
+                {skills.length > 4 && (
+                  <span className="badge badge-ghost badge-sm text-white/80">+{skills.length - 4}</span>
+                )}
               </div>
             )}
-          </>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-base-200 to-base-300">
-            <div className="text-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-24 w-24 text-base-content/20 mx-auto mb-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <title>No image</title>
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1.5"
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
-              <p className="text-xs text-base-content/40">No photo</p>
-            </div>
           </div>
-        )}
-      </figure>
+        </figure>
 
-      {/* Card Body */}
-      <div className="card-body p-6">
-        {/* Name */}
-        <div className="mb-3">
-          <h2 className="card-title text-xl font-bold text-base-content mb-1">{fullName}</h2>
-        </div>
-
-        {/* About Section */}
-        <div className="mb-4">
-          <p className="text-sm text-base-content/70 line-clamp-3 leading-relaxed">{about}</p>
-        </div>
-
-        {/* Skills Section */}
-        {skills.length > 0 ? (
-          <div className="mb-4">
-            <h3 className="text-xs font-semibold mb-2 text-base-content/60 uppercase tracking-wide flex items-center gap-1">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-3 text-primary"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <title>Skills</title>
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                />
-              </svg>
-              Skills
-            </h3>
-            <div className="flex flex-wrap gap-1.5">
-              {skills.slice(0, 5).map((skill) => {
-                const skillKey = typeof skill === 'string' ? skill : String(skill);
-                const skillLabel = typeof skill === 'string' ? skill : skill.name || String(skill);
-                return (
-                  <span key={skillKey} className="badge badge-primary badge-sm font-medium">
-                    {skillLabel}
-                  </span>
-                );
-              })}
-              {skills.length > 5 && (
-                <span className="badge badge-ghost badge-sm font-medium">+{skills.length - 5} more</span>
-              )}
-            </div>
-          </div>
-        ) : (
-          <div className="mb-4">
-            <span className="text-xs text-base-content/40 italic">No skills listed</span>
-          </div>
-        )}
-
-        {/* Action Buttons */}
-        <div className="card-actions justify-between mt-auto pt-4 border-t border-base-300 gap-2">
-          <button type="button" className="btn btn-ghost btn-sm flex-1 hover:btn-error transition-all">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <title>Ignore</title>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-            Ignore
-          </button>
+        {/* Tinder-style action buttons */}
+        <div className="card-body p-4 flex-row justify-center gap-6 bg-base-100">
           <button
             type="button"
-            className="btn btn-primary btn-sm flex-1 hover:btn-primary-focus transition-all shadow-md hover:shadow-lg"
+            className="btn btn-circle btn-lg bg-base-200 hover:bg-error/20 hover:border-error/50 border-2 border-base-300 text-base-content action-pulse transition-all"
+            onClick={handleIgnoreRequest}
+            aria-label="Pass"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-1"
+              className="h-8 w-8"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
+              strokeWidth={2.5}
             >
-              <title>Send Request</title>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+              <title>Pass</title>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
-            Send Request
+          </button>
+          <button
+            type="button"
+            className="btn btn-circle btn-lg bg-primary hover:bg-primary-focus text-primary-content shadow-lg shadow-primary/25 action-pulse transition-all"
+            onClick={handleSendRequest}
+            aria-label="Connect"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-8 w-8"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <title>Connect</title>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+              />
+            </svg>
           </button>
         </div>
-      </div>
+      </article>
     </div>
   );
 };

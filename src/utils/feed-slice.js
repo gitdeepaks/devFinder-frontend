@@ -4,10 +4,13 @@ const feedSlice = createSlice({
   name: 'feed',
   initialState: null,
   reducers: {
-    addFeed: (state, action) => {
+    addFeed: (_state, action) => {
       return action.payload;
     },
-    removeFeed: (state, action) => null,
+    removeFeed: (state, action) => {
+      const newArrayFeed = state.filter((user) => user._id !== action.payload);
+      return newArrayFeed;
+    },
   },
 });
 

@@ -90,8 +90,6 @@ export const EditProfile = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    setServerError('');
-    setSuccessMessage('');
 
     // Real-time validation
     if (errors[name]) {
@@ -161,13 +159,6 @@ export const EditProfile = () => {
       ...prev,
       skills: prev.skills.filter((skill) => skill !== skillToRemove),
     }));
-  };
-
-  const handleSkillInputKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleAddSkill();
-    }
   };
 
   const validateForm = () => {
@@ -271,33 +262,31 @@ export const EditProfile = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 pb-32 max-w-7xl">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Profile Card - Left Side */}
+    <div className="container mx-auto px-4 py-8 pb-24 max-w-7xl">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1">
-          <div className="sticky top-8">
+          <div className="sticky top-24">
             <ProfileCard user={user} />
           </div>
         </div>
 
-        {/* Edit Form - Right Side */}
         <div className="lg:col-span-2">
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h1 className="card-title text-3xl mb-6">Edit Profile</h1>
+          <div className="card bg-base-100 shadow-xl rounded-3xl border border-base-300/50 overflow-hidden">
+            <div className="card-body p-6 sm:p-8">
+              <h1 className="text-2xl font-bold mb-6">Edit Profile</h1>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* First Name */}
                 <div className="form-control">
-                  <label htmlFor="firstName" className="label">
+                  <label htmlFor="firstName" className="label py-0">
                     <span className="label-text font-semibold">First Name</span>
-                    <span className="label-text-alt text-error">* Min 3 characters</span>
+                    <span className="label-text-alt text-error">* Min 3 chars</span>
                   </label>
                   <input
                     type="text"
                     id="firstName"
                     name="firstName"
-                    className={`input input-bordered w-full ${errors.firstName ? 'input-error' : ''}`}
+                    className={`input input-bordered w-full rounded-xl ${errors.firstName ? 'input-error' : ''}`}
                     value={formData.firstName}
                     onChange={handleInputChange}
                     onBlur={handleBlur}
@@ -312,14 +301,14 @@ export const EditProfile = () => {
 
                 {/* Last Name */}
                 <div className="form-control">
-                  <label htmlFor="lastName" className="label">
+                  <label htmlFor="lastName" className="label py-0">
                     <span className="label-text font-semibold">Last Name</span>
                   </label>
                   <input
                     type="text"
                     id="lastName"
                     name="lastName"
-                    className="input input-bordered w-full"
+                    className="input input-bordered w-full rounded-xl"
                     value={formData.lastName}
                     onChange={handleInputChange}
                     placeholder="Enter your last name"
@@ -328,15 +317,15 @@ export const EditProfile = () => {
 
                 {/* Email */}
                 <div className="form-control">
-                  <label htmlFor="emailId" className="label">
-                    <span className="label-text font-semibold">Email Address</span>
-                    <span className="label-text-alt text-error">* Must be unique</span>
+                  <label htmlFor="emailId" className="label py-0">
+                    <span className="label-text font-semibold">Email</span>
+                    <span className="label-text-alt text-error">* Unique</span>
                   </label>
                   <input
                     type="email"
                     id="emailId"
                     name="emailId"
-                    className={`input input-bordered w-full ${errors.emailId ? 'input-error' : ''}`}
+                    className={`input input-bordered w-full rounded-xl ${errors.emailId ? 'input-error' : ''}`}
                     value={formData.emailId}
                     onChange={handleInputChange}
                     onBlur={handleBlur}
@@ -351,14 +340,14 @@ export const EditProfile = () => {
 
                 {/* Photo URL */}
                 <div className="form-control">
-                  <label htmlFor="photoUrl" className="label">
+                  <label htmlFor="photoUrl" className="label py-0">
                     <span className="label-text font-semibold">Profile Photo URL</span>
                   </label>
                   <input
                     type="url"
                     id="photoUrl"
                     name="photoUrl"
-                    className={`input input-bordered w-full ${errors.photoUrl ? 'input-error' : ''}`}
+                    className={`input input-bordered w-full rounded-xl ${errors.photoUrl ? 'input-error' : ''}`}
                     value={formData.photoUrl}
                     onChange={handleInputChange}
                     onBlur={handleBlur}
@@ -374,7 +363,7 @@ export const EditProfile = () => {
                       <img
                         src={formData.photoUrl}
                         alt="Profile preview"
-                        className="w-24 h-24 object-cover rounded-lg border border-base-300"
+                        className="w-24 h-24 object-cover rounded-xl border border-base-300"
                         onError={(e) => {
                           e.target.style.display = 'none';
                         }}
@@ -387,13 +376,13 @@ export const EditProfile = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Gender */}
                   <div className="form-control">
-                    <label htmlFor="gender" className="label">
+                    <label htmlFor="gender" className="label py-0">
                       <span className="label-text font-semibold">Gender</span>
                     </label>
                     <select
                       id="gender"
                       name="gender"
-                      className={`select select-bordered w-full ${errors.gender ? 'select-error' : ''}`}
+                      className={`select select-bordered w-full rounded-xl ${errors.gender ? 'select-error' : ''}`}
                       value={formData.gender}
                       onChange={handleInputChange}
                       onBlur={handleBlur}
@@ -412,7 +401,7 @@ export const EditProfile = () => {
 
                   {/* Age */}
                   <div className="form-control">
-                    <label htmlFor="age" className="label">
+                    <label htmlFor="age" className="label py-0">
                       <span className="label-text font-semibold">Age</span>
                       <span className="label-text-alt text-error">* Min 18</span>
                     </label>
@@ -420,7 +409,7 @@ export const EditProfile = () => {
                       type="number"
                       id="age"
                       name="age"
-                      className={`input input-bordered w-full ${errors.age ? 'input-error' : ''}`}
+                      className={`input input-bordered w-full rounded-xl ${errors.age ? 'input-error' : ''}`}
                       value={formData.age}
                       onChange={handleInputChange}
                       onBlur={handleBlur}
@@ -437,13 +426,13 @@ export const EditProfile = () => {
 
                 {/* About */}
                 <div className="form-control">
-                  <label htmlFor="about" className="label">
+                  <label htmlFor="about" className="label py-0">
                     <span className="label-text font-semibold">About</span>
                   </label>
                   <textarea
                     id="about"
                     name="about"
-                    className="textarea textarea-bordered h-32"
+                    className="textarea textarea-bordered h-32 rounded-xl"
                     value={formData.about}
                     onChange={handleInputChange}
                     placeholder="Tell us about yourself..."
@@ -452,20 +441,25 @@ export const EditProfile = () => {
 
                 {/* Skills */}
                 <div className="form-control">
-                  <label htmlFor="skills" className="label">
+                  <label htmlFor="skills" className="label py-0">
                     <span className="label-text font-semibold">Skills</span>
                   </label>
                   <div className="flex gap-2 mb-2">
                     <input
                       type="text"
                       id="skills"
-                      className="input input-bordered flex-1"
+                      className="input input-bordered flex-1 rounded-xl"
                       value={skillInput}
                       onChange={(e) => setSkillInput(e.target.value)}
-                      onKeyPress={handleSkillInputKeyPress}
-                      placeholder="Add a skill and press Enter"
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddSkill();
+                        }
+                      }}
+                      placeholder="Add skill, press Enter"
                     />
-                    <button type="button" className="btn btn-primary" onClick={handleAddSkill}>
+                    <button type="button" className="btn btn-primary rounded-xl" onClick={handleAddSkill}>
                       Add
                     </button>
                   </div>
@@ -502,13 +496,16 @@ export const EditProfile = () => {
                   )}
                 </div>
 
-                {/* Submit Button */}
-                <div className="form-control mt-8 mb-8">
-                  <button type="submit" className="btn btn-primary btn-lg w-full" disabled={isSubmitting}>
+                <div className="form-control mt-8">
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-lg w-full rounded-xl shadow-lg shadow-primary/20 disabled:opacity-50"
+                    disabled={isSubmitting}
+                  >
                     {isSubmitting ? (
                       <>
-                        <span className="loading loading-spinner loading-sm"></span>
-                        Updating Profile...
+                        <span className="loading loading-spinner loading-sm" />
+                        Updating…
                       </>
                     ) : (
                       'Update Profile'

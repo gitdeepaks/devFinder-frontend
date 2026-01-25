@@ -1,7 +1,7 @@
+import { toast } from '@pheralb/toast';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from '@pheralb/toast';
 import { BASE_URL } from '../utils/contstants';
 import { addFeed } from '../utils/feed-slice';
 import { UserCard } from './user-card';
@@ -13,59 +13,80 @@ export const Feed = () => {
 
   const getFeed = async () => {
     try {
-      // Don't fetch if feed already exists
       if (feed && Array.isArray(feed) && feed.length > 0) return;
-      
       setIsLoading(true);
       const response = await axios.get(`${BASE_URL}/user/feed`, { withCredentials: true });
-      
-      // Ensure response.data is an array
       const feedData = Array.isArray(response.data) ? response.data : response.data?.data || [];
       dispatch(addFeed(feedData));
-      console.log('Feed data:', feedData);
     } catch (error) {
       console.error('Error fetching feed:', error);
       toast.error({
-        text: 'Feed Error',
-        description: 'Failed to load feed. Please try again later.',
+        text: 'Couldn’t load feed',
+        description: 'Please try again later.',
       });
     } finally {
       setIsLoading(false);
     }
   };
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: reason
+  // biome-ignore lint/correctness/useExhaustiveDependencies: fetch on mount
   useEffect(() => {
     getFeed();
   }, []);
 
-  // Loading state
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center my-10 min-h-[400px]">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
+        <span className="loading loading-spinner loading-lg text-primary" />
+        <p className="mt-4 text-base-content/60 font-medium">Finding developers…</p>
       </div>
     );
   }
 
-
-  // Check if feed is null, undefined, or not an array
   if (!feed || !Array.isArray(feed) || feed.length === 0) {
     return (
-      <div className="flex justify-center items-center my-10 min-h-[400px]">
-        <div className="text-center">
-          <p className="text-lg text-base-content/70">No users found in feed</p>
-          <p className="text-sm text-base-content/50 mt-2">Check back later for new connections</p>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
+        <div className="w-24 h-24 rounded-full bg-base-200/80 flex items-center justify-center mb-4">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-12 w-12 text-primary/50"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <title>No users</title>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+            />
+          </svg>
         </div>
+        <h2 className="text-xl font-bold text-base-content">No one left to discover</h2>
+        <p className="mt-2 text-base-content/60 max-w-sm">
+          Check back later for new developers. You can also update your profile to get more matches.
+        </p>
+      </div>
+    );
+  }
+
+  const currentUser = feed[0];
+  if (!currentUser) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <p className="text-base-content/60">No users in feed.</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-wrap justify-center gap-6 my-10 px-4">
-      {feed.map((user) => (
-        <UserCard user={user} key={user._id || user.id || Math.random()} />
-      ))}
+    <div className="py-6 px-4">
+      <div className="max-w-md mx-auto mb-4 text-center">
+        <h1 className="text-lg font-semibold text-base-content">Discover developers</h1>
+        <p className="text-sm text-base-content/60 mt-0.5">Swipe-style • Tap heart to connect, X to pass</p>
+      </div>
+      <UserCard user={currentUser} key={currentUser._id || currentUser.id || Math.random()} />
     </div>
   );
 };
