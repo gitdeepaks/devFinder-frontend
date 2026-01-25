@@ -1,6 +1,9 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../utils/contstants';
+import { removeUser } from '../utils/user-slice';
 
 const Navbar = () => {
   const user = useSelector((store) => store.user);
@@ -8,6 +11,18 @@ const Navbar = () => {
 
   // Handle nested data structure if needed
   const userData = user?.data || user;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(`${BASE_URL}/logout`, {}, { withCredentials: true });
+      dispatch(removeUser());
+      navigate('/login');
+    } catch (error) {
+      error.response.status === 401 ? navigate('/login') : console.log(error);
+    }
+  };
 
   // Reset image error when user changes
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -71,12 +86,15 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <button type="button" className="w-full text-left">
-                  Settings
-                </button>
+                <Link to="/connections">
+                  <button type="button" className="w-full text-left">
+                    Connections
+                  </button>
+                </Link>
               </li>
+
               <li>
-                <button type="button" className="w-full text-left">
+                <button type="button" className="w-full text-left" onClick={handleLogout}>
                   Logout
                 </button>
               </li>
