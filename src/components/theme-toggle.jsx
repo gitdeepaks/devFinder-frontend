@@ -2,7 +2,7 @@ import { useTheme } from '../utils/theme-context';
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
-  const isDark = theme === 'monokai-pro-dark';
+  const isDark = theme === 't3-dark';
 
   return (
     <button

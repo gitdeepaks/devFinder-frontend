@@ -1,5 +1,6 @@
 import { toast } from '@pheralb/toast';
 import axios from 'axios';
+import { animate, motion, useMotionValue, useTransform } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { BASE_URL } from '../utils/contstants';
@@ -9,11 +10,29 @@ export const UserCard = ({ user }) => {
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageSrc, setImageSrc] = useState('');
+  const [isExiting, setIsExiting] = useState(false);
   const dispatch = useDispatch();
+
+  // Framer Motion values for drag
+  const x = useMotionValue(0);
+  const rotate = useTransform(x, [-200, 200], [-25, 25]);
+  const opacity = useTransform(x, [-200, -120, 0, 120, 200], [0, 1, 1, 1, 0]);
+
+  // Labels opacity based on drag distance
+  const interestedOpacity = useTransform(x, [120, 200], [0, 1]);
+  const ignoreOpacity = useTransform(x, [-200, -120], [1, 0]);
 
   const photoUrl = user?.photoUrl;
 
-  const handleSendRequest = async () => {
+  const handleSendRequest = async (shouldAnimate = true) => {
+    if (isExiting) return;
+    setIsExiting(true);
+
+    if (shouldAnimate) {
+      // Animate card off screen to the right
+      await animate(x, 500, { duration: 0.3, ease: 'easeInOut' });
+    }
+
     try {
       const { data } = await axios.post(
         `${BASE_URL}/request/status/interested/${user._id}`,
@@ -27,6 +46,8 @@ export const UserCard = ({ user }) => {
       });
     } catch (error) {
       console.error('Error sending request:', error);
+      setIsExiting(false);
+      x.set(0);
       toast.error({
         text: 'Couldn’t send',
         description: error.response?.data?.message || 'Please try again.',
@@ -34,7 +55,15 @@ export const UserCard = ({ user }) => {
     }
   };
 
-  const handleIgnoreRequest = async () => {
+  const handleIgnoreRequest = async (shouldAnimate = true) => {
+    if (isExiting) return;
+    setIsExiting(true);
+
+    if (shouldAnimate) {
+      // Animate card off screen to the left
+      await animate(x, -500, { duration: 0.3, ease: 'easeInOut' });
+    }
+
     try {
       const { data } = await axios.post(
         `${BASE_URL}/request/status/ignored/${user._id}`,
@@ -48,10 +77,29 @@ export const UserCard = ({ user }) => {
       });
     } catch (error) {
       console.error('Error ignoring request:', error);
+      setIsExiting(false);
+      x.set(0);
       toast.error({
         text: 'Error',
         description: error.response?.data?.message || 'Please try again.',
       });
+    }
+  };
+
+  const handleDragEnd = (_event, info) => {
+    const threshold = 120;
+    const velocity = info.velocity.x;
+
+    // Check if dragged beyond threshold or has high velocity
+    if (info.offset.x > threshold || velocity > 500) {
+      // Swiped right - Interested
+      handleSendRequest(true);
+    } else if (info.offset.x < -threshold || velocity < -500) {
+      // Swiped left - Ignore
+      handleIgnoreRequest(true);
+    } else {
+      // Spring back to center
+      animate(x, 0, { type: 'spring', stiffness: 300, damping: 30 });
     }
   };
 
@@ -74,8 +122,40 @@ export const UserCard = ({ user }) => {
   const hasValidImage = imageSrc && !imageError;
 
   return (
-    <div className="w-full max-w-md mx-auto">
-      <article className="card card-hover-shine bg-base-100 overflow-hidden rounded-3xl shadow-2xl border border-base-300/50">
+    <div className="w-full max-w-md mx-auto relative">
+      {/* Interested Label */}
+      <motion.div
+        className="absolute top-1/2 right-8 -translate-y-1/2 z-20 pointer-events-none"
+        style={{ opacity: interestedOpacity }}
+      >
+        <div className="bg-success/90 text-success-content px-6 py-3 rounded-2xl font-bold text-xl shadow-lg border-2 border-success-content/20">
+          INTERESTED
+        </div>
+      </motion.div>
+
+      {/* Ignore Label */}
+      <motion.div
+        className="absolute top-1/2 left-8 -translate-y-1/2 z-20 pointer-events-none"
+        style={{ opacity: ignoreOpacity }}
+      >
+        <div className="bg-error/90 text-error-content px-6 py-3 rounded-2xl font-bold text-xl shadow-lg border-2 border-error-content/20">
+          IGNORE
+        </div>
+      </motion.div>
+
+      <motion.article
+        className="card card-hover-shine bg-base-100 overflow-hidden rounded-3xl shadow-2xl border border-base-300/50 cursor-grab active:cursor-grabbing"
+        style={{
+          x,
+          rotate,
+          opacity,
+        }}
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.2}
+        onDragEnd={handleDragEnd}
+        whileDrag={{ cursor: 'grabbing' }}
+      >
         {/* Full-bleed image with gradient overlay — Tinder-style */}
         <figure className="relative aspect-[3/4] min-h-[420px] overflow-hidden bg-gradient-to-br from-base-200 to-base-300">
           {hasValidImage ? (
@@ -194,7 +274,7 @@ export const UserCard = ({ user }) => {
             </svg>
           </button>
         </div>
-      </article>
+      </motion.article>
     </div>
   );
 };

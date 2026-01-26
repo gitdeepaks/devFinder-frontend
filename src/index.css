@@ -1,69 +1,71 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-/* Monokai Pro Dark Theme */
-[data-theme="monokai-pro-dark"] {
+/* T3 Chat Dark Theme - Matching screenshot with deep purple-grey tones */
+[data-theme="t3-dark"] {
   color-scheme: dark;
-  /* Base colors - Monokai Pro Dark background */
-  --color-base-100: oklch(20% 0.02 150);
-  --color-base-200: oklch(18% 0.02 150);
-  --color-base-300: oklch(16% 0.02 150);
-  --color-base-content: oklch(95% 0.005 100);
-  /* Primary - Monokai Pro Purple */
-  --color-primary: oklch(75% 0.15 280);
-  --color-primary-content: oklch(20% 0.02 150);
-  /* Secondary - Monokai Pro Cyan */
-  --color-secondary: oklch(75% 0.12 200);
-  --color-secondary-content: oklch(20% 0.02 150);
-  /* Accent - Monokai Pro Orange */
-  --color-accent: oklch(70% 0.15 50);
-  --color-accent-content: oklch(20% 0.02 150);
-  /* Neutral */
-  --color-neutral: oklch(30% 0.02 150);
-  --color-neutral-content: oklch(95% 0.005 100);
+  /* Base colors - Deep dark purple-grey backgrounds (matching sidebar #1A1A2E) */
+  --color-base-100: oklch(0.18 0.015 280);
+  /* Main content area - slightly lighter (#202030) */
+  --color-base-200: oklch(0.20 0.015 280);
+  /* Selected state - muted purple-grey (#2F2D40) */
+  --color-base-300: oklch(0.25 0.02 280);
+  --color-base-content: oklch(0.95 0.005 280);
+  /* Primary - Purple accent for buttons (#6B21A8 / deep magenta-purple) */
+  --color-primary: oklch(0.45 0.18 300);
+  --color-primary-content: oklch(0.98 0 0);
+  /* Secondary - Muted purple-grey for secondary elements */
+  --color-secondary: oklch(0.30 0.02 280);
+  --color-secondary-content: oklch(0.95 0.005 280);
+  /* Accent - Lighter purple-grey for hover states */
+  --color-accent: oklch(0.35 0.025 285);
+  --color-accent-content: oklch(0.95 0.005 280);
+  /* Neutral - Purple-tinted grey */
+  --color-neutral: oklch(0.28 0.02 280);
+  --color-neutral-content: oklch(0.95 0.005 280);
   /* Semantic colors */
-  --color-info: oklch(75% 0.12 200);
-  --color-info-content: oklch(20% 0.02 150);
-  --color-success: oklch(75% 0.12 150);
-  --color-success-content: oklch(20% 0.02 150);
-  --color-warning: oklch(80% 0.15 90);
-  --color-warning-content: oklch(20% 0.02 150);
-  --color-error: oklch(65% 0.18 30);
-  --color-error-content: oklch(95% 0.005 100);
-  --radius-box: 1rem;
+  --color-info: oklch(0.55 0.15 250);
+  --color-info-content: oklch(0.98 0 0);
+  --color-success: oklch(0.65 0.15 150);
+  --color-success-content: oklch(0.18 0.015 280);
+  --color-warning: oklch(0.75 0.15 70);
+  --color-warning-content: oklch(0.18 0.015 280);
+  --color-error: oklch(0.65 0.20 20);
+  --color-error-content: oklch(0.98 0 0);
+  --radius-box: 0.625rem;
   --radius-field: 0.5rem;
 }
 
-/* Monokai Pro Light Theme */
-[data-theme="monokai-pro-light"] {
+/* T3 Chat Light Theme - Clean light theme with subtle purple hints */
+[data-theme="t3-light"] {
   color-scheme: light;
-  /* Base colors - Monokai Pro Light background */
-  --color-base-100: oklch(98% 0.002 100);
-  --color-base-200: oklch(95% 0.002 100);
-  --color-base-300: oklch(92% 0.002 100);
-  --color-base-content: oklch(20% 0.02 150);
-  /* Primary - Monokai Pro Purple (darker for light mode) */
-  --color-primary: oklch(60% 0.18 280);
-  --color-primary-content: oklch(98% 0.002 100);
-  /* Secondary - Monokai Pro Cyan (darker for light mode) */
-  --color-secondary: oklch(60% 0.15 200);
-  --color-secondary-content: oklch(98% 0.002 100);
-  /* Accent - Monokai Pro Orange */
-  --color-accent: oklch(65% 0.18 50);
-  --color-accent-content: oklch(98% 0.002 100);
+  /* Base colors - Clean white with very subtle purple tint */
+  --color-base-100: oklch(0.99 0.002 280);
+  --color-base-200: oklch(0.97 0.003 280);
+  --color-base-300: oklch(0.94 0.004 280);
+  --color-base-content: oklch(0.20 0.015 280);
+  /* Primary - Deep purple for buttons (darker for light mode) */
+  --color-primary: oklch(0.40 0.20 300);
+  --color-primary-content: oklch(0.99 0 0);
+  /* Secondary - Light purple-grey */
+  --color-secondary: oklch(0.92 0.005 280);
+  --color-secondary-content: oklch(0.25 0.02 280);
+  /* Accent - Light purple-grey for hover states */
+  --color-accent: oklch(0.90 0.006 285);
+  --color-accent-content: oklch(0.25 0.02 280);
   /* Neutral */
-  --color-neutral: oklch(50% 0.02 150);
-  --color-neutral-content: oklch(98% 0.002 100);
+  --color-neutral: oklch(0.60 0.01 280);
+  --color-neutral-content: oklch(0.20 0.015 280);
   /* Semantic colors */
-  --color-info: oklch(60% 0.15 200);
-  --color-info-content: oklch(98% 0.002 100);
-  --color-success: oklch(60% 0.15 150);
-  --color-success-content: oklch(98% 0.002 100);
-  --color-warning: oklch(75% 0.18 90);
-  --color-warning-content: oklch(20% 0.02 150);
-  --color-error: oklch(55% 0.2 30);
-  --color-error-content: oklch(98% 0.002 100);
-  --radius-box: 1rem;
+  --color-info: oklch(0.55 0.15 250);
+  --color-info-content: oklch(0.99 0 0);
+  --color-success: oklch(0.60 0.15 150);
+  --color-success-content: oklch(0.99 0 0);
+  --color-warning: oklch(0.80 0.15 70);
+  --color-warning-content: oklch(0.20 0.015 280);
+  --color-error: oklch(0.55 0.20 20);
+  --color-error-content: oklch(0.99 0 0);
+  --radius-box: 0.625rem;
   --radius-field: 0.5rem;
 }
 
@@ -85,46 +87,24 @@ body {
   transition: background-color 0.3s ease;
 }
 
-[data-theme="monokai-pro-dark"] body {
-  background: linear-gradient(180deg, oklch(20% 0.02 150) 0%, oklch(18% 0.02 150) 100%);
+[data-theme="t3-dark"] body {
+  background: oklch(0.18 0.015 280);
 }
 
-[data-theme="monokai-pro-light"] body {
-  background: linear-gradient(180deg, oklch(98% 0.002 100) 0%, oklch(95% 0.002 100) 100%);
+[data-theme="t3-light"] body {
+  background: oklch(0.99 0.002 280);
 }
 
-/* Subtle grain overlay for depth */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 9999;
-}
+/* T3 Chat uses a clean, minimal design without grain overlay */
 
-/* Card shine on hover */
+/* T3 Chat uses subtle hover effects - simplified card hover */
 .card-hover-shine {
   position: relative;
   overflow: hidden;
+  transition: all 0.2s ease;
 }
-.card-hover-shine::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.03) 45%,
-    rgba(255, 255, 255, 0.08) 50%,
-    transparent 55%
-  );
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
-  pointer-events: none;
-}
-.card-hover-shine:hover::after {
-  transform: translateX(100%);
+.card-hover-shine:hover {
+  transform: translateY(-1px);
 }
 
 /* Tinder-style action button pulse */
