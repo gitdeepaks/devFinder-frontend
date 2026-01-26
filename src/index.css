@@ -7,7 +7,7 @@
   /* Base colors - Deep dark purple-grey backgrounds (matching sidebar #1A1A2E) */
   --color-base-100: oklch(0.18 0.015 280);
   /* Main content area - slightly lighter (#202030) */
-  --color-base-200: oklch(0.20 0.015 280);
+  --color-base-200: oklch(0.2 0.015 280);
   /* Selected state - muted purple-grey (#2F2D40) */
   --color-base-300: oklch(0.25 0.02 280);
   --color-base-content: oklch(0.95 0.005 280);
@@ -15,7 +15,7 @@
   --color-primary: oklch(0.45 0.18 300);
   --color-primary-content: oklch(0.98 0 0);
   /* Secondary - Muted purple-grey for secondary elements */
-  --color-secondary: oklch(0.30 0.02 280);
+  --color-secondary: oklch(0.3 0.02 280);
   --color-secondary-content: oklch(0.95 0.005 280);
   /* Accent - Lighter purple-grey for hover states */
   --color-accent: oklch(0.35 0.025 285);
@@ -30,7 +30,7 @@
   --color-success-content: oklch(0.18 0.015 280);
   --color-warning: oklch(0.75 0.15 70);
   --color-warning-content: oklch(0.18 0.015 280);
-  --color-error: oklch(0.65 0.20 20);
+  --color-error: oklch(0.65 0.2 20);
   --color-error-content: oklch(0.98 0 0);
   --radius-box: 0.625rem;
   --radius-field: 0.5rem;
@@ -43,27 +43,27 @@
   --color-base-100: oklch(0.99 0.002 280);
   --color-base-200: oklch(0.97 0.003 280);
   --color-base-300: oklch(0.94 0.004 280);
-  --color-base-content: oklch(0.20 0.015 280);
+  --color-base-content: oklch(0.2 0.015 280);
   /* Primary - Deep purple for buttons (darker for light mode) */
-  --color-primary: oklch(0.40 0.20 300);
+  --color-primary: oklch(0.4 0.2 300);
   --color-primary-content: oklch(0.99 0 0);
   /* Secondary - Light purple-grey */
   --color-secondary: oklch(0.92 0.005 280);
   --color-secondary-content: oklch(0.25 0.02 280);
   /* Accent - Light purple-grey for hover states */
-  --color-accent: oklch(0.90 0.006 285);
+  --color-accent: oklch(0.9 0.006 285);
   --color-accent-content: oklch(0.25 0.02 280);
   /* Neutral */
-  --color-neutral: oklch(0.60 0.01 280);
-  --color-neutral-content: oklch(0.20 0.015 280);
+  --color-neutral: oklch(0.6 0.01 280);
+  --color-neutral-content: oklch(0.2 0.015 280);
   /* Semantic colors */
   --color-info: oklch(0.55 0.15 250);
   --color-info-content: oklch(0.99 0 0);
-  --color-success: oklch(0.60 0.15 150);
+  --color-success: oklch(0.6 0.15 150);
   --color-success-content: oklch(0.99 0 0);
-  --color-warning: oklch(0.80 0.15 70);
-  --color-warning-content: oklch(0.20 0.015 280);
-  --color-error: oklch(0.55 0.20 20);
+  --color-warning: oklch(0.8 0.15 70);
+  --color-warning-content: oklch(0.2 0.015 280);
+  --color-error: oklch(0.55 0.2 20);
   --color-error-content: oklch(0.99 0 0);
   --radius-box: 0.625rem;
   --radius-field: 0.5rem;
