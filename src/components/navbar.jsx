@@ -85,6 +85,11 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li>
+                  <Link to="/premium" className="rounded-xl">
+                    Premium
+                  </Link>
+                </li>
+                <li>
                   <button type="button" className="rounded-xl text-error hover:bg-error/10" onClick={handleLogout}>
                     Log out
                   </button>

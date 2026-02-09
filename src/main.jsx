@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { HelmetProvider } from 'react-helmet-async';
 import './index.css';
 import { Toaster } from '@pheralb/toast';
 import { Provider } from 'react-redux';
@@ -10,11 +11,13 @@ import { ThemeProvider } from './utils/theme-context';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Provider store={appStore}>
-      <ThemeProvider>
-        <App />
-        <Toaster />
-      </ThemeProvider>
-    </Provider>
+    <HelmetProvider>
+      <Provider store={appStore}>
+        <ThemeProvider>
+          <App />
+          <Toaster />
+        </ThemeProvider>
+      </Provider>
+    </HelmetProvider>
   </StrictMode>
 );

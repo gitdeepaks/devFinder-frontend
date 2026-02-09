@@ -3,6 +3,7 @@ import Body from './components/body';
 import Connections from './components/connections';
 import { Feed } from './components/feed';
 import Login from './components/login';
+import { Premium } from './components/premium';
 import Profile from './components/profile';
 import { Requests } from './components/requests';
 import { Signup } from './components/signup';
@@ -19,6 +20,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/connections" element={<Connections />} />
             <Route path="/requests" element={<Requests />} />
+            <Route path="/premium" element={<Premium />} />
           </Route>
         </Routes>
       </BrowserRouter>
