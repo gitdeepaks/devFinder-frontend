@@ -1,6 +1,6 @@
 import { toast } from "@pheralb/toast";
 import axios from "axios";
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { BASE_URL } from "../utils/contstants";
 
 const PLANS = [
@@ -89,7 +89,9 @@ export const Premium = () => {
 				if (!cancelled) setIsCheckingPremium(false);
 			}
 		})();
-		return () => { cancelled = true; };
+		return () => {
+			cancelled = true;
+		};
 	}, [checkPremiumStatus]);
 
 	const handleChoosePlan = async (plan) => {
@@ -156,7 +158,8 @@ export const Premium = () => {
 				}
 				toast.info({
 					text: "Payment received",
-					description: "Your premium will be active shortly. Refresh the page in a moment.",
+					description:
+						"Your premium will be active shortly. Refresh the page in a moment.",
 				});
 			};
 
@@ -222,16 +225,28 @@ export const Premium = () => {
 				<div className="max-w-2xl mx-auto px-4 py-16 text-center">
 					<div className="rounded-2xl border border-primary/20 bg-primary/5 p-8 sm:p-10">
 						<div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
-							<svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+							<svg
+								className="h-7 w-7"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								strokeWidth={2}
+								aria-hidden="true"
+							>
 								<title>Checkmark</title>
-								<path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									d="M5 13l4 4L19 7"
+								/>
 							</svg>
 						</div>
 						<h2 className="text-2xl font-semibold text-base-content mb-2">
 							You're a Premium member
 						</h2>
 						<p className="text-base-content/70">
-							You have full access to premium features. Enjoy better visibility and support.
+							You have full access to premium features. Enjoy better visibility
+							and support.
 						</p>
 					</div>
 				</div>
