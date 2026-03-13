@@ -1,92 +1,114 @@
-import { toast } from '@pheralb/toast';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { BASE_URL } from '../utils/contstants';
-import { addFeed } from '../utils/feed-slice';
-import { UserCard } from './user-card';
+import { toast } from "@pheralb/toast";
+import axios from "axios";
+import { memo, useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { BASE_URL } from "../utils/contstants";
+import { addFeed } from "../utils/feed-slice";
+import { UserCard } from "./user-card";
 
-export const Feed = () => {
-  const dispatch = useDispatch();
-  const feed = useSelector((store) => store.feed);
-  const [isLoading, setIsLoading] = useState(false);
+const EmptyFeedState = memo(() => (
+	<div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
+		<div className="w-24 h-24 rounded-full bg-base-200/80 flex items-center justify-center mb-4">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				className="h-12 w-12 text-primary/50"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke="currentColor"
+			>
+				<title>No users</title>
+				<path
+					strokeLinecap="round"
+					strokeLinejoin="round"
+					strokeWidth={1.5}
+					d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+				/>
+			</svg>
+		</div>
+		<h2 className="text-xl font-bold text-base-content">
+			No one left to discover
+		</h2>
+		<p className="mt-2 text-base-content/60 max-w-sm">
+			Check back later for new developers. You can also update your profile to
+			get more matches.
+		</p>
+	</div>
+));
 
-  const getFeed = async () => {
-    try {
-      if (feed && Array.isArray(feed) && feed.length > 0) return;
-      setIsLoading(true);
-      const response = await axios.get(`${BASE_URL}/user/feed`, { withCredentials: true });
-      const feedData = Array.isArray(response.data) ? response.data : response.data?.data || [];
-      dispatch(addFeed(feedData));
-    } catch (error) {
-      console.error('Error fetching feed:', error);
-      toast.error({
-        text: 'Couldn’t load feed',
-        description: 'Please try again later.',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+const FeedInner = () => {
+	const dispatch = useDispatch();
+	const feed = useSelector((store) => store.feed);
+	const [isLoading, setIsLoading] = useState(false);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: fetch on mount
-  useEffect(() => {
-    getFeed();
-  }, []);
+	const currentUser = useMemo(
+		() => (Array.isArray(feed) && feed.length > 0 ? feed[0] : null),
+		[feed],
+	);
 
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
-        <span className="loading loading-spinner loading-lg text-primary" />
-        <p className="mt-4 text-base-content/60 font-medium">Finding developers…</p>
-      </div>
-    );
-  }
+	const getFeed = async () => {
+		try {
+			if (Array.isArray(feed) && feed.length > 0) return;
+			setIsLoading(true);
+			const response = await axios.get(`${BASE_URL}/user/feed`, {
+				withCredentials: true,
+			});
+			const feedData = Array.isArray(response.data)
+				? response.data
+				: response.data?.data || [];
+			dispatch(addFeed(feedData));
+		} catch (error) {
+			const status = error?.response?.status;
+			// If the user is not authenticated yet, silently ignore 401 to avoid noisy toasts on first load
+			if (status === 401) {
+				console.info("Feed request unauthorized; likely no active session yet.");
+			} else {
+				console.error("Error fetching feed:", error);
+				toast.error({
+					text: "Couldn’t load feed",
+					description: "Please try again later.",
+				});
+			}
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
-  if (!feed || !Array.isArray(feed) || feed.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
-        <div className="w-24 h-24 rounded-full bg-base-200/80 flex items-center justify-center mb-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-12 w-12 text-primary/50"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <title>No users</title>
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
-            />
-          </svg>
-        </div>
-        <h2 className="text-xl font-bold text-base-content">No one left to discover</h2>
-        <p className="mt-2 text-base-content/60 max-w-sm">
-          Check back later for new developers. You can also update your profile to get more matches.
-        </p>
-      </div>
-    );
-  }
+	// biome-ignore lint/correctness/useExhaustiveDependencies: fetch on mount
+	useEffect(() => {
+		getFeed();
+	}, []);
 
-  const currentUser = feed[0];
-  if (!currentUser) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-base-content/60">No users in feed.</p>
-      </div>
-    );
-  }
+	if (isLoading) {
+		return (
+			<div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
+				<span className="loading loading-spinner loading-lg text-primary" />
+				<p className="mt-4 text-base-content/60 font-medium">
+					Finding developers…
+				</p>
+			</div>
+		);
+	}
 
-  return (
-    <div className="py-6 px-4">
-      <div className="max-w-md mx-auto mb-4 text-center">
-        <h1 className="text-lg font-semibold text-base-content">Discover developers</h1>
-        <p className="text-sm text-base-content/60 mt-0.5">Swipe-style • Tap heart to connect, X to pass</p>
-      </div>
-      <UserCard user={currentUser} key={currentUser._id || currentUser.id || Math.random()} />
-    </div>
-  );
+	if (!currentUser) {
+		return <EmptyFeedState />;
+	}
+
+	return (
+		<div className="py-6 px-4">
+			<div className="max-w-md mx-auto mb-4 text-center">
+				<h1 className="text-lg font-semibold text-base-content">
+					Discover developers
+				</h1>
+				<p className="text-sm text-base-content/60 mt-0.5">
+					Swipe-style • Tap heart to connect, X to pass
+				</p>
+			</div>
+			<UserCard
+				user={currentUser}
+				key={currentUser._id || currentUser.id || "current-user"}
+			 />
+		</div>
+	);
 };
+
+export const Feed = memo(FeedInner);

@@ -1,6 +1,7 @@
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <explanation> */
 import { toast } from "@pheralb/toast";
 import axios from "axios";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL, SITE_URL } from "../utils/contstants";
@@ -12,7 +13,7 @@ export const Chat = () => {
 	const user = useSelector((store) => store.user);
 	const connections = useSelector((store) => store.connections);
 	const userData = user?.data || user;
-	const userId = user?._id;
+	const userId = userData?._id;
 
 	const [message, setMessage] = useState("");
 	const [messages, setMessages] = useState([]);
@@ -64,17 +65,19 @@ export const Chat = () => {
 	}, [fetchChat]);
 
 	useEffect(() => {
-		if (!userId || !targetUserId) return;
+		if (!userId || !targetUserId || !userData) return;
 
 		const socket = createSocketConnection();
 		socketRef.current = socket;
 
-		socket.emit("joinChat", {
-			firstName: userData.firstName,
-			lastName: userData.lastName,
-			targetUserId,
-			userId,
-		});
+		if (userData) {
+			socket.emit("joinChat", {
+				firstName: userData.firstName,
+				lastName: userData.lastName,
+				targetUserId,
+				userId,
+			});
+		}
 
 		socket.on("receiveMessage", (message) => {
 			setMessages((prev) => [...prev, message]);
@@ -85,17 +88,22 @@ export const Chat = () => {
 			socket.disconnect();
 			socketRef.current = null;
 		};
-	}, [userId, targetUserId, userData.firstName, userData.lastName]);
+	}, [userId, targetUserId, userData]);
 
 	useEffect(() => {
 		if (!messagesEndRef.current) return;
-		messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-	}, []);
+		messagesEndRef.current.scrollIntoView({
+			behavior: "smooth",
+			block: "end",
+		});
+		// biome-ignore lint/correctness/useExhaustiveDependencies: scroll when messages change
+	}, [messages]);
 
 	const handleSend = (e) => {
 		e?.preventDefault();
 		const text = message.trim();
-		if (!text || !socketRef.current || !userId || !targetUserId) return;
+		if (!text || !socketRef.current || !userId || !targetUserId || !userData)
+			return;
 
 		const newMessage = {
 			firstName: userData.firstName,
@@ -114,24 +122,42 @@ export const Chat = () => {
 		setMessage("");
 	};
 
-	const targetUser =
-		Array.isArray(connections) && targetUserId
-			? connections.find((c) => c._id === targetUserId || c.id === targetUserId)
-			: null;
+	const targetUser = useMemo(
+		() =>
+			Array.isArray(connections) && targetUserId
+				? connections.find(
+						(c) => c._id === targetUserId || c.id === targetUserId,
+					)
+				: null,
+		[connections, targetUserId],
+	);
 
 	const handleBack = () => {
 		navigate(-1);
 	};
 
-	const targetUserName = targetUser
-		? `${targetUser.firstName || ""} ${targetUser.lastName || ""}`.trim() ||
-			"Developer"
-		: null;
+	const targetUserName = useMemo(
+		() =>
+			targetUser
+				? `${targetUser.firstName || ""} ${targetUser.lastName || ""}`.trim() ||
+					"Developer"
+				: null,
+		[targetUser],
+	);
 
-	const title = (targetUserName && `Chat with ${targetUserName}`) || "Chat";
+	const title = useMemo(
+		() => (targetUserName && `Chat with ${targetUserName}`) || "Chat",
+		[targetUserName],
+	);
+
+	const formatTime = (iso) => {
+		if (!iso) return "";
+		const d = new Date(iso);
+		return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+	};
 
 	return (
-		<div className="max-w-3xl mx-auto h-[calc(100vh-7rem)] px-4 py-4 flex flex-col">
+		<div className="max-w-3xl mx-auto h-[calc(100vh-6rem)] sm:h-[calc(100vh-7rem)] px-3 sm:px-4 py-3 sm:py-4 flex flex-col rounded-3xl bg-base-100/95 shadow-xl border border-base-300/70 backdrop-blur">
 			<header className="flex items-center gap-3 pb-3 border-b border-base-300/60">
 				<button
 					type="button"
@@ -153,7 +179,7 @@ export const Chat = () => {
 					</svg>
 				</button>
 				<div className="flex flex-col">
-					<h1 className="text-lg font-semibold">{title}</h1>
+					<h1 className="text-lg font-semibold tracking-tight">{title}</h1>
 					{userData && (
 						<p className="text-xs text-base-content/60">
 							Signed in as {userData.firstName} {userData.lastName}
@@ -162,7 +188,7 @@ export const Chat = () => {
 				</div>
 			</header>
 
-			<section className="flex-1 overflow-y-auto py-4 space-y-3">
+			<section className="flex-1 overflow-y-auto py-4 space-y-3 scrollbar-thin scrollbar-thumb-base-300/80 scrollbar-track-transparent">
 				{messages.length === 0 ? (
 					<div className="h-full flex flex-col items-center justify-center text-center text-base-content/60">
 						<div className="w-16 h-16 rounded-full bg-base-200 flex items-center justify-center mb-3">
@@ -188,19 +214,37 @@ export const Chat = () => {
 				) : (
 					messages.map((msg) => {
 						const isMe = msg.sender === "me";
+						const timeLabel = formatTime(msg.createdAt);
 						return (
 							<div
 								key={msg.id}
-								className={`flex ${isMe ? "justify-end" : "justify-start"}`}
+								className={`flex items-end gap-2 ${
+									isMe ? "justify-end" : "justify-start"
+								}`}
 							>
+								{!isMe && (
+									<div className="avatar placeholder w-7 h-7">
+										<div className="bg-base-200 rounded-full text-xs flex items-center justify-center">
+											<span>
+												{(msg.firstName?.[0] || "").toUpperCase()}
+												{(msg.lastName?.[0] || "").toUpperCase()}
+											</span>
+										</div>
+									</div>
+								)}
 								<div
-									className={`px-3 py-2 rounded-2xl max-w-[80%] text-sm ${
+									className={`px-3 py-2 rounded-2xl max-w-[80%] text-sm shadow-sm ${
 										isMe
 											? "bg-primary text-primary-content rounded-br-sm"
 											: "bg-base-200 text-base-content rounded-bl-sm"
 									}`}
 								>
-									<p>{msg.text}</p>
+									<p className="whitespace-pre-wrap leading-snug">{msg.text}</p>
+									{timeLabel && (
+										<p className="mt-1 text-[10px] opacity-70 text-right">
+											{timeLabel}
+										</p>
+									)}
 								</div>
 							</div>
 						);
@@ -211,13 +255,19 @@ export const Chat = () => {
 
 			<form
 				onSubmit={handleSend}
-				className="mt-2 pt-2 border-t border-base-300/60 flex items-end gap-2"
+				className="mt-2 pt-3 border-t border-base-300/60 flex items-end gap-3"
 			>
 				<textarea
-					className="textarea textarea-bordered flex-1 rounded-2xl resize-none min-h-12 max-h-28"
+					className="textarea textarea-bordered flex-1 rounded-2xl resize-none min-h-12 max-h-28 bg-base-200/60 focus:bg-base-100 transition-colors text-sm"
 					placeholder="Type a message..."
 					value={message}
 					onChange={(e) => setMessage(e.target.value)}
+					onKeyDown={(e) => {
+						if (e.key === "Enter" && !e.shiftKey) {
+							e.preventDefault();
+							handleSend(e);
+						}
+					}}
 					rows={1}
 				/>
 				<button

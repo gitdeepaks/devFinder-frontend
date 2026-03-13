@@ -1,16 +1,56 @@
 import { toast } from "@pheralb/toast";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addConnection } from "../utils/connection-slice";
 import { BASE_URL } from "../utils/contstants";
 
-export default function Connections() {
+const EmptyConnectionsState = memo(() => (
+	<div className="container max-w-4xl mx-auto px-4 py-10">
+		<header className="text-center mb-10">
+			<h1 className="text-2xl font-bold">Connections</h1>
+			<p className="text-base-content/60 mt-1">People you’ve connected with</p>
+		</header>
+		<div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
+			<div className="w-20 h-20 rounded-full bg-base-200 flex items-center justify-center mb-4">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					className="h-10 w-10 text-primary/50"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+				>
+					<title>No connections</title>
+					<path
+						strokeLinecap="round"
+						strokeLinejoin="round"
+						strokeWidth={1.5}
+						d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
+					/>
+				</svg>
+			</div>
+			<h2 className="text-lg font-semibold text-base-content">
+				No connections yet
+			</h2>
+			<p className="mt-2 text-base-content/60 max-w-sm">
+				Discover developers and tap the heart to connect. Your connections will
+				show up here.
+			</p>
+		</div>
+	</div>
+));
+
+const ConnectionsInner = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const connections = useSelector((store) => store.connections);
 	const [isLoading, setIsLoading] = useState(false);
+
+	const hasConnections = useMemo(
+		() => Array.isArray(connections) && connections.length > 0,
+		[connections],
+	);
 
 	const fetchConnections = async () => {
 		try {
@@ -47,43 +87,8 @@ export default function Connections() {
 		);
 	}
 
-	if (!connections || !Array.isArray(connections) || connections.length === 0) {
-		return (
-			<div className="container max-w-4xl mx-auto px-4 py-10">
-				<header className="text-center mb-10">
-					<h1 className="text-2xl font-bold">Connections</h1>
-					<p className="text-base-content/60 mt-1">
-						People you’ve connected with
-					</p>
-				</header>
-				<div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
-					<div className="w-20 h-20 rounded-full bg-base-200 flex items-center justify-center mb-4">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							className="h-10 w-10 text-primary/50"
-							fill="none"
-							viewBox="0 0 24 24"
-							stroke="currentColor"
-						>
-							<title>No connections</title>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth={1.5}
-								d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"
-							/>
-						</svg>
-					</div>
-					<h2 className="text-lg font-semibold text-base-content">
-						No connections yet
-					</h2>
-					<p className="mt-2 text-base-content/60 max-w-sm">
-						Discover developers and tap the heart to connect. Your connections
-						will show up here.
-					</p>
-				</div>
-			</div>
-		);
+	if (!hasConnections) {
+		return <EmptyConnectionsState />;
 	}
 
 	return (
@@ -102,7 +107,7 @@ export default function Connections() {
 					const about = c.about || "No bio.";
 					const skills = c.skills || [];
 					const photoUrl = c.photoUrl;
-					const key = c._id || c.id || Math.random();
+					const key = c._id || c.id || fullName;
 
 					return (
 						<article
@@ -118,6 +123,7 @@ export default function Connections() {
 													src={photoUrl}
 													alt={fullName}
 													className="w-full h-full object-cover"
+													loading="lazy"
 												/>
 											) : (
 												<div className="w-full h-full flex items-center justify-center text-lg font-bold text-base-content/40">
@@ -165,7 +171,7 @@ export default function Connections() {
 								<div className="mt-4 flex justify-end">
 									<button
 										type="button"
-										className="btn btn-primary btn-sm"
+										className="btn btn-primary btn-sm rounded-xl"
 										onClick={() => navigate(`/chat/${c._id || c.id}`)}
 									>
 										Chat
@@ -178,4 +184,6 @@ export default function Connections() {
 			</div>
 		</div>
 	);
-}
+};
+
+export default memo(ConnectionsInner);
