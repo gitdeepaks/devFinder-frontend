@@ -1,6 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { toast } from "@pheralb/toast";
+import axios from "axios";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { BASE_URL, SITE_URL } from "../utils/contstants";
 import { createSocketConnection } from "../utils/socket";
 
 export const Chat = () => {
@@ -15,6 +18,50 @@ export const Chat = () => {
 	const [messages, setMessages] = useState([]);
 	const messagesEndRef = useRef(null);
 	const socketRef = useRef(null);
+
+	const fetchChat = useCallback(async () => {
+		if (!userId || !targetUserId) return;
+
+		try {
+			const response = await axios.get(
+				`${BASE_URL || SITE_URL}/chat/${targetUserId}`,
+				{
+					withCredentials: true,
+				},
+			);
+			const chat = response.data;
+			const rawMessages = Array.isArray(chat?.messages) ? chat.messages : [];
+
+			const chatMessages = rawMessages.map((message) => {
+				const senderUser = message?.content;
+				const senderId = senderUser?._id || senderUser?.id;
+				const isMe = senderId && senderId === userId;
+
+				return {
+					firstName: senderUser?.firstName,
+					lastName: senderUser?.lastName,
+					id: message?._id || message?.id,
+					text: message?.text,
+					sender: isMe ? "me" : "them",
+					createdAt: message?.createdAt,
+					fromUserId: senderId,
+					toUserId: isMe ? targetUserId : userId,
+				};
+			});
+
+			setMessages(chatMessages);
+		} catch (error) {
+			console.error("Error fetching chat:", error);
+			toast.error({
+				text: "Error fetching chat",
+				description: error.response?.data?.message || "Please try again later.",
+			});
+		}
+	}, [userId, targetUserId]);
+
+	useEffect(() => {
+		fetchChat();
+	}, [fetchChat]);
 
 	useEffect(() => {
 		if (!userId || !targetUserId) return;
@@ -43,8 +90,6 @@ export const Chat = () => {
 	useEffect(() => {
 		if (!messagesEndRef.current) return;
 		messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-		// We intentionally omit dependencies to run on every render where ref is set.
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleSend = (e) => {
