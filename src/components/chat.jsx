@@ -1,10 +1,9 @@
-/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <explanation> */
 import { toast } from "@pheralb/toast";
 import axios from "axios";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { BASE_URL, SITE_URL } from "../utils/contstants";
+import { BASE_URL } from "../utils/contstants";
 import { createSocketConnection } from "../utils/socket";
 
 export const Chat = () => {
@@ -23,13 +22,19 @@ export const Chat = () => {
 	const fetchChat = useCallback(async () => {
 		if (!userId || !targetUserId) return;
 
+		if (!BASE_URL) {
+			console.error("BASE_URL is not configured for chat API.");
+			toast.error({
+				text: "Chat unavailable",
+				description: "API base URL is not configured.",
+			});
+			return;
+		}
+
 		try {
-			const response = await axios.get(
-				`${BASE_URL || SITE_URL}/chat/${targetUserId}`,
-				{
-					withCredentials: true,
-				},
-			);
+			const response = await axios.get(`${BASE_URL}/chat/${targetUserId}`, {
+				withCredentials: true,
+			});
 			const chat = response.data;
 			const rawMessages = Array.isArray(chat?.messages) ? chat.messages : [];
 
@@ -96,8 +101,7 @@ export const Chat = () => {
 			behavior: "smooth",
 			block: "end",
 		});
-		// biome-ignore lint/correctness/useExhaustiveDependencies: scroll when messages change
-	}, [messages]);
+	}, []);
 
 	const handleSend = (e) => {
 		e?.preventDefault();

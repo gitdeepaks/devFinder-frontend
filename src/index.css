@@ -1,27 +1,24 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-/* T3 Chat Dark Theme - Matching screenshot with deep purple-grey tones */
+/* DevFinder Dark Theme - neutral slate with blue accent (Vercel-style minimal) */
 [data-theme="t3-dark"] {
   color-scheme: dark;
-  /* Base colors - Deep dark purple-grey backgrounds (matching sidebar #1A1A2E) */
-  --color-base-100: oklch(0.18 0.015 280);
-  /* Main content area - slightly lighter (#202030) */
-  --color-base-200: oklch(0.2 0.015 280);
-  /* Selected state - muted purple-grey (#2F2D40) */
-  --color-base-300: oklch(0.25 0.02 280);
+  /* Base - layered slate surfaces */
+  --color-base-100: oklch(0.17 0.02 250); /* app background */
+  --color-base-200: oklch(0.22 0.02 250); /* cards / panels */
+  --color-base-300: oklch(0.28 0.03 250); /* borders / subtle accents */
   --color-base-content: oklch(0.95 0.005 280);
-  /* Primary - Purple accent for buttons (#6B21A8 / deep magenta-purple) */
-  --color-primary: oklch(0.45 0.18 300);
+  /* Primary - saturated blue accent */
+  --color-primary: oklch(0.63 0.18 255);
   --color-primary-content: oklch(0.98 0 0);
-  /* Secondary - Muted purple-grey for secondary elements */
-  --color-secondary: oklch(0.3 0.02 280);
-  --color-secondary-content: oklch(0.95 0.005 280);
-  /* Accent - Lighter purple-grey for hover states */
-  --color-accent: oklch(0.35 0.025 285);
-  --color-accent-content: oklch(0.95 0.005 280);
-  /* Neutral - Purple-tinted grey */
-  --color-neutral: oklch(0.28 0.02 280);
+  /* Secondary / accent - subtle blue greys for pills & chips */
+  --color-secondary: oklch(0.3 0.03 250);
+  --color-secondary-content: oklch(0.9 0.01 260);
+  --color-accent: oklch(0.5 0.11 255);
+  --color-accent-content: oklch(0.98 0 0);
+  /* Neutral - soft slate greys */
+  --color-neutral: oklch(0.32 0.02 250);
   --color-neutral-content: oklch(0.95 0.005 280);
   /* Semantic colors */
   --color-info: oklch(0.55 0.15 250);
@@ -36,26 +33,26 @@
   --radius-field: 0.5rem;
 }
 
-/* T3 Chat Light Theme - Clean light theme with subtle purple hints */
+/* DevFinder Light Theme - clean grey with blue accent */
 [data-theme="t3-light"] {
   color-scheme: light;
-  /* Base colors - Clean white with very subtle purple tint */
-  --color-base-100: oklch(0.99 0.002 280);
-  --color-base-200: oklch(0.97 0.003 280);
-  --color-base-300: oklch(0.94 0.004 280);
-  --color-base-content: oklch(0.2 0.015 280);
-  /* Primary - Deep purple for buttons (darker for light mode) */
-  --color-primary: oklch(0.4 0.2 300);
+  /* Base colors - neutral light greys */
+  --color-base-100: oklch(0.99 0.004 250);
+  --color-base-200: oklch(0.96 0.006 250);
+  --color-base-300: oklch(0.9 0.01 250);
+  --color-base-content: oklch(0.18 0.02 260);
+  /* Primary - blue accent for emphasis */
+  --color-primary: oklch(0.63 0.18 255);
   --color-primary-content: oklch(0.99 0 0);
-  /* Secondary - Light purple-grey */
-  --color-secondary: oklch(0.92 0.005 280);
-  --color-secondary-content: oklch(0.25 0.02 280);
-  /* Accent - Light purple-grey for hover states */
-  --color-accent: oklch(0.9 0.006 285);
-  --color-accent-content: oklch(0.25 0.02 280);
+  /* Secondary - light grey for secondary surfaces */
+  --color-secondary: oklch(0.94 0.006 250);
+  --color-secondary-content: oklch(0.22 0.03 260);
+  /* Accent - subtle blue-tinted chips */
+  --color-accent: oklch(0.85 0.06 255);
+  --color-accent-content: oklch(0.2 0.03 260);
   /* Neutral */
-  --color-neutral: oklch(0.6 0.01 280);
-  --color-neutral-content: oklch(0.2 0.015 280);
+  --color-neutral: oklch(0.55 0.02 260);
+  --color-neutral-content: oklch(0.18 0.02 260);
   /* Semantic colors */
   --color-info: oklch(0.55 0.15 250);
   --color-info-content: oklch(0.99 0 0);
@@ -84,27 +81,26 @@ html {
 /* Theme-aware body background */
 body {
   min-height: 100vh;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, background-image 0.3s ease;
 }
 
 [data-theme="t3-dark"] body {
-  background: oklch(0.18 0.015 280);
+  background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9) 0, transparent 60%), oklch(0.17 0.02 250);
 }
 
 [data-theme="t3-light"] body {
-  background: oklch(0.99 0.002 280);
+  background: linear-gradient(180deg, oklch(0.99 0.004 250), oklch(0.96 0.006 250));
 }
 
-/* T3 Chat uses a clean, minimal design without grain overlay */
-
-/* T3 Chat uses subtle hover effects - simplified card hover */
+/* Card hover - subtle lift like reference */
 .card-hover-shine {
   position: relative;
   overflow: hidden;
-  transition: all 0.2s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
 }
 .card-hover-shine:hover {
   transform: translateY(-1px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 /* Tinder-style action button pulse */

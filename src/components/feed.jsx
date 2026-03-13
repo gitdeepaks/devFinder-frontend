@@ -94,19 +94,23 @@ const FeedInner = () => {
 	}
 
 	return (
-		<div className="py-6 px-4">
+		<div className="py-4 sm:py-6">
 			<div className="max-w-md mx-auto mb-4 text-center">
-				<h1 className="text-lg font-semibold text-base-content">
-					Discover developers
+				<p className="inline-flex items-center gap-2 rounded-full bg-base-200/70 px-3 py-1 text-[11px] font-medium text-base-content/70 mb-2">
+					<span className="inline-block h-1.5 w-1.5 rounded-full bg-success" />
+					Discover developers nearby
+				</p>
+				<h1 className="text-xl font-semibold text-base-content">
+					Swipe to find your next dev match
 				</h1>
-				<p className="text-sm text-base-content/60 mt-0.5">
-					Swipe-style • Tap heart to connect, X to pass
+				<p className="text-xs sm:text-sm text-base-content/60 mt-1">
+					Heart to connect, cross to pass. One card at a time.
 				</p>
 			</div>
 			<UserCard
 				user={currentUser}
 				key={currentUser._id || currentUser.id || "current-user"}
-			 />
+			/>
 		</div>
 	);
 };

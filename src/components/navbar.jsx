@@ -29,24 +29,24 @@ const Navbar = () => {
   }, [user]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-base-300/50 bg-base-100/80 backdrop-blur-xl">
-      <div className="navbar max-w-7xl mx-auto px-4 sm:px-6">
+    <header className="sticky top-0 z-50 border-b border-base-300/40 bg-base-100/80 backdrop-blur-xl">
+      <div className="navbar max-w-6xl mx-auto px-4 sm:px-6">
         <div className="navbar-start">
-          <Link to="/" className="flex items-center gap-2 group">
-            <span className="font-logo text-xl sm:text-2xl font-bold tracking-tight">
-              <span className="text-primary">Dev</span>
-              <span className="text-base-content">Finder</span>
+          <Link to="/" className="flex items-center gap-2">
+            <span className="font-logo text-xl sm:text-2xl font-semibold tracking-tight">
+              <span className="text-base-content">Dev</span>
+              <span className="text-primary ml-0.5">Finder</span>
             </span>
           </Link>
         </div>
-        <div className="navbar-end flex items-center gap-2">
+        <div className="navbar-end flex items-center gap-3">
           <ThemeToggle />
           {userData ? (
             <div className="dropdown dropdown-end">
               <button
                 type="button"
                 tabIndex={0}
-                className="btn btn-ghost gap-2 rounded-full pl-2 pr-3 py-2 hover:bg-base-200/80 transition-all"
+                className="btn btn-ghost gap-2 rounded-full pl-2 pr-3 py-1.5 bg-base-200/40 hover:bg-base-200/80 transition-all border border-base-300/40"
               >
                 <span className="hidden sm:inline text-sm font-medium text-base-content">{userData.firstName}</span>
                 <div className="avatar placeholder">

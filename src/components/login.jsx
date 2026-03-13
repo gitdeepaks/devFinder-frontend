@@ -157,17 +157,9 @@ const Login = () => {
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-			{/* Gradient mesh background */}
-			<div
-				className="absolute inset-0 bg-gradient-to-br from-primary/10 via-base-100 to-secondary/10"
-				aria-hidden
-			/>
-			<div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-			<div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-secondary/20 rounded-full blur-3xl" />
-
-			<div className="relative w-full max-w-md">
-				<div className="card bg-base-100/95 backdrop-blur-xl shadow-2xl border border-base-300/50 rounded-3xl overflow-hidden">
+		<div className="min-h-screen flex items-center justify-center px-4">
+			<div className="w-full max-w-md">
+				<div className="card bg-base-100 shadow-xl border border-base-300/60 rounded-2xl">
 					<div className="card-body p-8 sm:p-10">
 						<div className="text-center mb-8">
 							<h1 className="font-logo text-3xl font-bold text-base-content tracking-tight">
@@ -266,7 +258,11 @@ const Login = () => {
 									/>
 									<span className="label-text">Remember me</span>
 								</label>
-								<button type="button" className="link link-primary link-hover">
+								<button
+									type="button"
+									className="link link-primary link-hover"
+									onClick={() => navigate("/forgot-password")}
+								>
 									Forgot password?
 								</button>
 							</div>

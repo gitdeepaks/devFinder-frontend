@@ -64,6 +64,7 @@ export const Premium = () => {
 	const [isPremium, setIsPremium] = useState(false);
 	const [isCheckingPremium, setIsCheckingPremium] = useState(true);
 	const [creatingOrderFor, setCreatingOrderFor] = useState(null);
+	const [membershipInfo, setMembershipInfo] = useState(null);
 
 	const checkPremiumStatus = useCallback(async () => {
 		try {
@@ -71,8 +72,19 @@ export const Premium = () => {
 				withCredentials: true,
 				validateStatus: (status) => status === 200 || status === 401,
 			});
-			return res.status === 200;
+
+			if (res.status === 200 && res.data?.isPremium) {
+				setMembershipInfo({
+					membershipType: res.data.membershipType || null,
+					membershipExpiryDate: res.data.membershipExpiryDate || null,
+				});
+				return true;
+			}
+
+			setMembershipInfo(null);
+			return false;
 		} catch {
+			setMembershipInfo(null);
 			return false;
 		}
 	}, []);
@@ -94,21 +106,35 @@ export const Premium = () => {
 		};
 	}, [checkPremiumStatus]);
 
+	const loadRazorpay = async () => {
+		if (window.Razorpay) return true;
+
+		return new Promise((resolve) => {
+			const script = document.createElement("script");
+			script.src = "https://checkout.razorpay.com/v1/checkout.js";
+			script.async = true;
+			script.onload = () => resolve(true);
+			script.onerror = () => resolve(false);
+			document.body.appendChild(script);
+		});
+	};
+
 	const handleChoosePlan = async (plan) => {
 		try {
-			if (!window.Razorpay) {
+			setCreatingOrderFor(plan.name);
+
+			const razorpayLoaded = await loadRazorpay();
+			if (!razorpayLoaded || !window.Razorpay) {
 				toast.error({
 					text: "Payment gateway not loaded",
-					description: "Please refresh the page and try again.",
+					description: "Please check your connection and try again.",
 				});
 				return;
 			}
 
-			setCreatingOrderFor(plan.name);
 			const response = await axios.post(
 				`${BASE_URL}/payment/create`,
 				{
-					amount: plan.amount,
 					membershipType: plan.membershipType,
 				},
 				{ withCredentials: true },
@@ -244,10 +270,28 @@ export const Premium = () => {
 						<h2 className="text-2xl font-semibold text-base-content mb-2">
 							You're a Premium member
 						</h2>
-						<p className="text-base-content/70">
+						<p className="text-base-content/70 mb-2">
 							You have full access to premium features. Enjoy better visibility
 							and support.
 						</p>
+						{membershipInfo && (
+							<p className="text-sm text-base-content/70">
+								Plan:{" "}
+								<span className="font-semibold">
+									{membershipInfo.membershipType ||
+										"Premium"}
+								</span>
+								{membershipInfo.membershipExpiryDate && (
+									<>
+										{" "}
+										· Active until{" "}
+										{new Date(
+											membershipInfo.membershipExpiryDate,
+										).toLocaleDateString()}
+									</>
+								)}
+							</p>
+						)}
 					</div>
 				</div>
 			</section>

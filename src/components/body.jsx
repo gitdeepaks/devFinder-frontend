@@ -9,7 +9,7 @@ import { addUser } from '../utils/user-slice';
 import BottomNav from './bottom-nav';
 import Navbar from './navbar';
 
-const AUTH_ROUTES = ['/login', '/signup'];
+const AUTH_ROUTES = ['/login', '/signup', '/forgot-password'];
 
 const getBaseUrl = () => (typeof window !== 'undefined' && !SITE_URL ? window.location.origin : SITE_URL || '');
 
@@ -61,8 +61,13 @@ const Body = () => {
         Skip to main content
       </a>
       {showAppShell && <Navbar />}
-      <main id="main-content" className={`flex-1 ${showBottomNav ? 'pb-20' : ''}`}>
-        <Outlet />
+      <main
+        id="main-content"
+        className={`flex-1 ${showBottomNav ? 'pb-20' : ''}`}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+          <Outlet />
+        </div>
       </main>
       {showBottomNav && <BottomNav />}
     </div>

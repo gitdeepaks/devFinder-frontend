@@ -92,18 +92,20 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-40 border-t border-base-300/50 bg-base-100/95 backdrop-blur-xl pb-safe"
+      className="fixed bottom-0 left-0 right-0 z-40 border-t border-base-300/30 bg-base-100/90 backdrop-blur-2xl pb-safe"
       aria-label="Main navigation"
     >
-      <div className="flex justify-around items-center h-16 max-w-lg mx-auto px-2">
+      <div className="flex justify-around items-center h-14 max-w-md mx-auto px-3">
         {navItems.map(({ to, label, icon: Icon }) => {
           const active = location.pathname === to || (to === '/' && location.pathname === '/');
           return (
             <Link
               key={to}
               to={to}
-              className={`flex flex-col items-center justify-center gap-0.5 min-w-[64px] py-2 rounded-xl transition-all duration-200 ${
-                active ? 'text-primary' : 'text-base-content/60 hover:text-base-content hover:bg-base-200/50'
+              className={`flex flex-col items-center justify-center gap-0.5 min-w-[64px] rounded-2xl px-3 py-1.5 transition-all duration-200 ${
+                active
+                  ? 'bg-primary text-primary-content shadow-[0_10px_30px_rgba(0,0,0,0.6)]'
+                  : 'text-base-content/60 hover:text-base-content hover:bg-base-200/60'
               }`}
               aria-current={active ? 'page' : undefined}
             >

@@ -8,6 +8,7 @@ import { Premium } from "./components/premium";
 import Profile from "./components/profile";
 import { Requests } from "./components/requests";
 import { Signup } from "./components/signup";
+import { ForgotPassword } from "./components/forgot-password";
 
 function App() {
 	return (
@@ -18,6 +19,7 @@ function App() {
 						<Route path="/" element={<Feed />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/signup" element={<Signup />} />
+						<Route path="/forgot-password" element={<ForgotPassword />} />
 						<Route path="/profile" element={<Profile />} />
 						<Route path="/connections" element={<Connections />} />
 						<Route path="/requests" element={<Requests />} />

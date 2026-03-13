@@ -124,7 +124,7 @@ export const Signup = () => {
         password: formData.password,
         gender: formData.gender.toLowerCase(),
       };
-      const res = await axios.post(`${BASE_URL}/singup`, payload, { withCredentials: true });
+      const res = await axios.post(`${BASE_URL}/signup`, payload, { withCredentials: true });
       dispatch(addUser(res.data.data));
       toast.success({
         text: 'Account created',
