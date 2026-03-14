@@ -161,7 +161,7 @@ export const Chat = () => {
 	};
 
 	return (
-		<div className="max-w-3xl mx-auto h-[calc(100vh-6rem)] sm:h-[calc(100vh-7rem)] px-3 sm:px-4 py-3 sm:py-4 flex flex-col rounded-3xl bg-base-100/95 shadow-xl border border-base-300/70 backdrop-blur">
+		<div className="max-w-3xl mx-auto h-[calc(100vh-6rem)] sm:h-[calc(100vh-7rem)] px-3 sm:px-4 py-3 sm:py-4 flex flex-col rounded-3xl bg-base-100/95 shadow-xl border border-base-300/60 backdrop-blur">
 			<header className="flex items-center gap-3 pb-3 border-b border-base-300/60">
 				<button
 					type="button"
@@ -183,7 +183,7 @@ export const Chat = () => {
 					</svg>
 				</button>
 				<div className="flex flex-col">
-					<h1 className="text-lg font-semibold tracking-tight">{title}</h1>
+					<h1 className="font-display text-lg font-semibold tracking-tight">{title}</h1>
 					{userData && (
 						<p className="text-xs text-base-content/60">
 							Signed in as {userData.firstName} {userData.lastName}

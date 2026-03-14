@@ -144,7 +144,7 @@ export const UserCard = ({ user }) => {
       </motion.div>
 
       <motion.article
-        className="card card-hover-shine bg-base-100 overflow-hidden rounded-3xl shadow-2xl border border-base-300/50 cursor-grab active:cursor-grabbing"
+        className="card card-hover-shine bg-base-100 overflow-hidden rounded-3xl shadow-xl border border-base-300/60 cursor-grab active:cursor-grabbing"
         style={{
           x,
           rotate,
@@ -210,8 +210,8 @@ export const UserCard = ({ user }) => {
             aria-hidden
           />
           <div className="absolute bottom-0 left-0 right-0 p-6 text-left">
-            <h2 className="text-2xl font-bold text-white drop-shadow-lg">{fullName}</h2>
-            <p className="text-white/90 text-sm mt-1 line-clamp-2">{about}</p>
+            <h2 className="font-display text-2xl font-bold text-white drop-shadow-lg">{fullName}</h2>
+            <p className="text-white/90 text-sm mt-1 line-clamp-2 font-medium">{about}</p>
             {skills.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-3">
                 {skills.slice(0, 4).map((skill) => {
@@ -232,7 +232,7 @@ export const UserCard = ({ user }) => {
         </figure>
 
         {/* Tinder-style action buttons */}
-        <div className="card-body p-4 flex-row justify-center gap-6 bg-base-100">
+        <div className="card-body p-5 flex-row justify-center gap-8 bg-base-100">
           <button
             type="button"
             className="btn btn-circle btn-lg bg-base-200 hover:bg-error/20 hover:border-error/50 border-2 border-base-300 text-base-content action-pulse transition-all"

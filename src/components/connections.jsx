@@ -1,5 +1,6 @@
 import { toast } from "@pheralb/toast";
 import axios from "axios";
+import { motion } from "framer-motion";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +10,7 @@ import { BASE_URL } from "../utils/contstants";
 const EmptyConnectionsState = memo(() => (
 	<div className="container max-w-4xl mx-auto px-4 py-10">
 		<header className="text-center mb-10">
-			<h1 className="text-2xl font-bold">Connections</h1>
+			<h1 className="font-display text-2xl font-bold">Connections</h1>
 			<p className="text-base-content/60 mt-1">People you’ve connected with</p>
 		</header>
 		<div className="flex flex-col items-center justify-center min-h-[40vh] text-center">
@@ -92,16 +93,21 @@ const ConnectionsInner = () => {
 	}
 
 	return (
-		<div className="container max-w-4xl mx-auto px-4 py-8">
+		<motion.div
+			className="container max-w-4xl mx-auto px-4 py-8"
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.3 }}
+		>
 			<header className="flex flex-wrap items-center gap-3 mb-8">
-				<h1 className="text-2xl font-bold">Connections</h1>
-				<span className="badge badge-primary badge-lg">
+				<h1 className="font-display text-2xl font-bold">Connections</h1>
+				<span className="badge badge-primary badge-lg font-semibold">
 					{connections.length}
 				</span>
 			</header>
 
 			<div className="grid gap-4 sm:grid-cols-2">
-				{connections.map((c) => {
+				{connections.map((c, i) => {
 					const fullName =
 						`${c.firstName || ""} ${c.lastName || ""}`.trim() || "Developer";
 					const about = c.about || "No bio.";
@@ -110,13 +116,18 @@ const ConnectionsInner = () => {
 					const key = c._id || c.id || fullName;
 
 					return (
-						<article
+						<motion.div
 							key={key}
-							className="card card-hover-shine bg-base-100 rounded-2xl border border-base-300/50 overflow-hidden"
+							initial={{ opacity: 0, y: 10 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ delay: i * 0.05, duration: 0.3 }}
+						>
+						<article
+							className="card card-hover-shine bg-base-100 rounded-2xl border border-base-300/60 overflow-hidden"
 						>
 							<div className="card-body p-5">
 								<div className="flex gap-4">
-									<div className="avatar flex-shrink-0">
+									<div className="avatar shrink-0">
 										<div className="w-14 h-14 rounded-full ring-2 ring-primary/20 overflow-hidden bg-base-200">
 											{photoUrl ? (
 												<img
@@ -179,10 +190,11 @@ const ConnectionsInner = () => {
 								</div>
 							</div>
 						</article>
+						</motion.div>
 					);
 				})}
 			</div>
-		</div>
+		</motion.div>
 	);
 };
 

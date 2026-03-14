@@ -29,13 +29,13 @@ const Navbar = () => {
   }, [user]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-base-300/40 bg-base-100/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-base-300/50 bg-base-100/90 backdrop-blur-xl">
       <div className="navbar max-w-6xl mx-auto px-4 sm:px-6">
         <div className="navbar-start">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="font-logo text-xl sm:text-2xl font-semibold tracking-tight">
+          <Link to="/" className="flex items-center gap-2 group">
+            <span className="font-display text-xl sm:text-2xl font-bold tracking-tight">
               <span className="text-base-content">Dev</span>
-              <span className="text-primary ml-0.5">Finder</span>
+              <span className="text-primary ml-0.5 transition-colors group-hover:opacity-90">Finder</span>
             </span>
           </Link>
         </div>
@@ -43,10 +43,10 @@ const Navbar = () => {
           <ThemeToggle />
           {userData ? (
             <div className="dropdown dropdown-end">
-              <button
+                <button
                 type="button"
                 tabIndex={0}
-                className="btn btn-ghost gap-2 rounded-full pl-2 pr-3 py-1.5 bg-base-200/40 hover:bg-base-200/80 transition-all border border-base-300/40"
+                className="btn btn-ghost gap-2 rounded-full pl-2 pr-3 py-1.5 bg-base-200/60 hover:bg-base-200 transition-all border border-base-300/50"
               >
                 <span className="hidden sm:inline text-sm font-medium text-base-content">{userData.firstName}</span>
                 <div className="avatar placeholder">
@@ -68,7 +68,7 @@ const Navbar = () => {
                   </div>
                 </div>
               </button>
-              <ul className="menu dropdown-content bg-base-200/95 backdrop-blur-xl rounded-2xl shadow-xl border border-base-300/50 mt-3 w-52 p-2 z-50">
+              <ul className="menu dropdown-content bg-base-200/95 backdrop-blur-xl rounded-2xl shadow-xl border border-base-300/50 mt-3 w-52 p-2 z-50 font-medium">
                 <li>
                   <Link to="/profile" className="rounded-xl">
                     Profile
@@ -98,10 +98,10 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="flex gap-2">
-              <Link to="/login" className="btn btn-ghost btn-sm rounded-xl">
+              <Link to="/login" className="btn btn-ghost btn-sm rounded-xl font-medium">
                 Log in
               </Link>
-              <Link to="/signup" className="btn btn-primary btn-sm rounded-xl">
+              <Link to="/signup" className="btn btn-primary btn-sm rounded-xl font-semibold">
                 Sign up
               </Link>
             </div>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -156,27 +157,33 @@ const Login = () => {
 		}
 	};
 
-	return (
-		<div className="min-h-screen flex items-center justify-center px-4">
-			<div className="w-full max-w-md">
-				<div className="card bg-base-100 shadow-xl border border-base-300/60 rounded-2xl">
-					<div className="card-body p-8 sm:p-10">
-						<div className="text-center mb-8">
-							<h1 className="font-logo text-3xl font-bold text-base-content tracking-tight">
-								Welcome back
-							</h1>
-							<p className="mt-2 text-base-content/70">Sign in to DevFinder</p>
-						</div>
+	const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.06 } } };
+	const item = { hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0 } };
 
-						<form
+	return (
+		<div className="min-h-screen flex items-center justify-center px-4 py-8">
+			<motion.div className="w-full max-w-md" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+				<div className="card bg-base-100 shadow-2xl border border-base-300/50 rounded-3xl overflow-hidden">
+					<div className="card-body p-8 sm:p-10">
+						<motion.div className="text-center mb-8" variants={container} initial="hidden" animate="show">
+							<motion.h1 className="font-display text-3xl sm:text-4xl font-bold text-base-content tracking-tight" variants={item}>
+								Welcome back
+							</motion.h1>
+							<motion.p className="mt-2 text-base-content/70 font-medium" variants={item}>Sign in to DevFinder</motion.p>
+						</motion.div>
+
+						<motion.form
 							onSubmit={(e) => {
 								e.preventDefault();
 								handleLogin();
 							}}
 							className="space-y-5"
+							variants={container}
+							initial="hidden"
+							animate="show"
 						>
 							{serverError && (
-								<div className="alert alert-error rounded-2xl shadow-lg">
+								<motion.div className="alert alert-error rounded-2xl shadow-lg" variants={item}>
 									<span>{serverError}</span>
 									<button
 										type="button"
@@ -201,10 +208,10 @@ const Login = () => {
 											/>
 										</svg>
 									</button>
-								</div>
+								</motion.div>
 							)}
 
-							<div className="form-control">
+							<motion.div className="form-control" variants={item}>
 								<label htmlFor="email" className="label">
 									<span className="label-text font-semibold">Email</span>
 								</label>
@@ -225,9 +232,9 @@ const Login = () => {
 										{errors.email}
 									</p>
 								)}
-							</div>
+							</motion.div>
 
-							<div className="form-control">
+							<motion.div className="form-control" variants={item}>
 								<label htmlFor="password" className="label">
 									<span className="label-text font-semibold">Password</span>
 								</label>
@@ -248,9 +255,9 @@ const Login = () => {
 										{errors.password}
 									</p>
 								)}
-							</div>
+							</motion.div>
 
-							<div className="flex items-center justify-between text-sm">
+							<motion.div className="flex items-center justify-between text-sm" variants={item}>
 								<label className="label cursor-pointer gap-2 py-0">
 									<input
 										type="checkbox"
@@ -265,12 +272,13 @@ const Login = () => {
 								>
 									Forgot password?
 								</button>
-							</div>
+							</motion.div>
 
-							<button
+							<motion.button
 								type="submit"
 								className="btn btn-primary w-full rounded-xl h-12 text-base font-semibold shadow-lg shadow-primary/20 disabled:opacity-50"
 								disabled={isSubmitting}
+								variants={item}
 							>
 								{isSubmitting ? (
 									<>
@@ -280,10 +288,10 @@ const Login = () => {
 								) : (
 									"Sign in"
 								)}
-							</button>
-						</form>
+							</motion.button>
+						</motion.form>
 
-						<p className="text-center text-sm text-base-content/60 mt-6">
+						<p className="text-center text-sm text-base-content/60 mt-6 font-medium">
 							Don’t have an account?{" "}
 							<button
 								type="button"
@@ -295,7 +303,7 @@ const Login = () => {
 						</p>
 					</div>
 				</div>
-			</div>
+			</motion.div>
 		</div>
 	);
 };

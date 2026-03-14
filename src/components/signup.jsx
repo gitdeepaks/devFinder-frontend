@@ -1,5 +1,6 @@
 import { toast } from '@pheralb/toast';
 import axios from 'axios';
+import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -151,17 +152,17 @@ export const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center p-4 py-8 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 via-base-100 to-primary/10" aria-hidden />
       <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-secondary/20 rounded-full blur-3xl" />
       <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-primary/20 rounded-full blur-3xl" />
 
-      <div className="relative w-full max-w-md">
+      <motion.div className="relative w-full max-w-md" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
         <div className="card bg-base-100/95 backdrop-blur-xl shadow-2xl border border-base-300/50 rounded-3xl overflow-hidden">
           <div className="card-body p-8 sm:p-10">
             <div className="text-center mb-6">
-              <h1 className="font-logo text-3xl font-bold text-base-content tracking-tight">Create account</h1>
-              <p className="mt-2 text-base-content/70">Join DevFinder and connect with developers</p>
+              <h1 className="font-display text-3xl sm:text-4xl font-bold text-base-content tracking-tight">Create account</h1>
+              <p className="mt-2 text-base-content/70 font-medium">Join DevFinder and connect with developers</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -284,7 +285,7 @@ export const Signup = () => {
             </p>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

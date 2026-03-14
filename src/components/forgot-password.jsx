@@ -1,4 +1,5 @@
 import axios from "axios";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@pheralb/toast";
@@ -75,15 +76,15 @@ export const ForgotPassword = () => {
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center px-4">
-			<div className="w-full max-w-md">
-				<div className="card bg-base-100 shadow-xl border border-base-300/60 rounded-2xl">
+		<div className="min-h-screen flex items-center justify-center px-4 py-8">
+			<motion.div className="w-full max-w-md" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+				<div className="card bg-base-100 shadow-2xl border border-base-300/50 rounded-3xl overflow-hidden">
 					<div className="card-body p-8 sm:p-10">
 						<div className="text-center mb-8">
-							<h1 className="font-logo text-3xl font-bold text-base-content tracking-tight">
+							<h1 className="font-display text-3xl sm:text-4xl font-bold text-base-content tracking-tight">
 								Reset password
 							</h1>
-							<p className="mt-2 text-base-content/70 text-sm">
+							<p className="mt-2 text-base-content/70 text-sm font-medium">
 								Enter your email and new password to reset your account.
 							</p>
 						</div>
@@ -161,7 +162,7 @@ export const ForgotPassword = () => {
 						</button>
 					</div>
 				</div>
-			</div>
+			</motion.div>
 		</div>
 	);
 };

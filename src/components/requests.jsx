@@ -1,5 +1,6 @@
 import { toast } from "@pheralb/toast";
 import axios from "axios";
+import { motion } from "framer-motion";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL } from "../utils/contstants";
@@ -8,8 +9,8 @@ import { addRequest, removeRequest } from "../utils/request-slice.js";
 const EmptyRequestsState = memo(() => (
 	<div className="container max-w-4xl mx-auto px-4 py-10">
 		<header className="text-center mb-10">
-			<h1 className="text-2xl font-bold">Connection Requests</h1>
-			<p className="text-base-content/60 mt-1">
+			<h1 className="font-display text-2xl font-bold">Connection Requests</h1>
+			<p className="text-base-content/60 mt-1 font-medium">
 				People who want to connect with you
 			</p>
 		</header>
@@ -145,16 +146,21 @@ export const Requests = () => {
 	}
 
 	return (
-		<div className="container max-w-4xl mx-auto px-4 py-8">
+		<motion.div
+			className="container max-w-4xl mx-auto px-4 py-8"
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.3 }}
+		>
 			<header className="flex flex-wrap items-center gap-3 mb-8">
-				<h1 className="text-2xl font-bold">Connection Requests</h1>
-				<span className="badge badge-primary badge-lg">
+				<h1 className="font-display text-2xl font-bold">Connection Requests</h1>
+				<span className="badge badge-primary badge-lg font-semibold">
 					{requests.length}
 				</span>
 			</header>
 
 			<div className="grid gap-4 sm:grid-cols-2">
-				{requests.map((req) => {
+				{requests.map((req, i) => {
 					const user = req.fromUserId || {};
 					const fullName =
 						`${user.firstName || ""} ${user.lastName || ""}`.trim() ||
@@ -166,13 +172,18 @@ export const Requests = () => {
 					const isProcessing = processingIds.has(requestId);
 
 					return (
-						<article
+						<motion.div
 							key={requestId}
-							className="card card-hover-shine bg-base-100 rounded-2xl border border-base-300/50 overflow-hidden"
+							initial={{ opacity: 0, y: 10 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ delay: i * 0.05, duration: 0.3 }}
+						>
+						<article
+							className="card card-hover-shine bg-base-100 rounded-2xl border border-base-300/60 overflow-hidden"
 						>
 							<div className="card-body p-5">
 								<div className="flex gap-4">
-									<div className="avatar flex-shrink-0">
+									<div className="avatar shrink-0">
 										<div className="w-14 h-14 rounded-full ring-2 ring-primary/20 overflow-hidden bg-base-200">
 											{photoUrl ? (
 												<img
@@ -285,9 +296,10 @@ export const Requests = () => {
 								</div>
 							</div>
 						</article>
+						</motion.div>
 					);
 				})}
 			</div>
-		</div>
+		</motion.div>
 	);
 };

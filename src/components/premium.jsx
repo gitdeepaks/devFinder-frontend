@@ -267,7 +267,7 @@ export const Premium = () => {
 								/>
 							</svg>
 						</div>
-						<h2 className="text-2xl font-semibold text-base-content mb-2">
+						<h2 className="font-display text-2xl font-bold text-base-content mb-2">
 							You're a Premium member
 						</h2>
 						<p className="text-base-content/70 mb-2">
@@ -302,10 +302,10 @@ export const Premium = () => {
 		<section className="min-h-[calc(100vh-4rem)] bg-base-100">
 			<div className="max-w-6xl mx-auto px-4 py-12 sm:py-16 lg:py-20">
 				<div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-					<p className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary mb-3">
+					<p className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary mb-3">
 						Premium access
 					</p>
-					<h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-base-content mb-3">
+					<h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-base-content mb-3">
 						Premium Membership Plans
 					</h2>
 					<p className="text-sm sm:text-base text-base-content/70">

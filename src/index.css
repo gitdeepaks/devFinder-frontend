@@ -1,125 +1,142 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-/* DevFinder Dark Theme - neutral slate with blue accent (Vercel-style minimal) */
+/* DevFinder — Industrial / terminal-inspired design system */
+/* Display: Syne · Body: DM Sans · Accent: warm amber */
+
 [data-theme="t3-dark"] {
   color-scheme: dark;
-  /* Base - layered slate surfaces */
-  --color-base-100: oklch(0.17 0.02 250); /* app background */
-  --color-base-200: oklch(0.22 0.02 250); /* cards / panels */
-  --color-base-300: oklch(0.28 0.03 250); /* borders / subtle accents */
-  --color-base-content: oklch(0.95 0.005 280);
-  /* Primary - saturated blue accent */
-  --color-primary: oklch(0.63 0.18 255);
-  --color-primary-content: oklch(0.98 0 0);
-  /* Secondary / accent - subtle blue greys for pills & chips */
-  --color-secondary: oklch(0.3 0.03 250);
-  --color-secondary-content: oklch(0.9 0.01 260);
-  --color-accent: oklch(0.5 0.11 255);
-  --color-accent-content: oklch(0.98 0 0);
-  /* Neutral - soft slate greys */
-  --color-neutral: oklch(0.32 0.02 250);
-  --color-neutral-content: oklch(0.95 0.005 280);
-  /* Semantic colors */
-  --color-info: oklch(0.55 0.15 250);
+  --color-base-100: oklch(0.12 0.015 260);
+  --color-base-200: oklch(0.18 0.02 260);
+  --color-base-300: oklch(0.25 0.025 260);
+  --color-base-content: oklch(0.92 0.01 260);
+  --color-primary: oklch(0.75 0.15 70);
+  --color-primary-content: oklch(0.15 0.03 70);
+  --color-secondary: oklch(0.28 0.03 260);
+  --color-secondary-content: oklch(0.9 0.02 260);
+  --color-accent: oklch(0.72 0.14 165);
+  --color-accent-content: oklch(0.15 0.03 165);
+  --color-neutral: oklch(0.3 0.02 260);
+  --color-neutral-content: oklch(0.92 0.01 260);
+  --color-info: oklch(0.6 0.14 250);
   --color-info-content: oklch(0.98 0 0);
-  --color-success: oklch(0.65 0.15 150);
-  --color-success-content: oklch(0.18 0.015 280);
+  --color-success: oklch(0.65 0.18 145);
+  --color-success-content: oklch(0.15 0.02 145);
   --color-warning: oklch(0.75 0.15 70);
-  --color-warning-content: oklch(0.18 0.015 280);
-  --color-error: oklch(0.65 0.2 20);
+  --color-warning-content: oklch(0.18 0.02 70);
+  --color-error: oklch(0.6 0.2 25);
   --color-error-content: oklch(0.98 0 0);
-  --radius-box: 0.625rem;
+  --radius-box: 0.75rem;
   --radius-field: 0.5rem;
+  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
-/* DevFinder Light Theme - clean grey with blue accent */
 [data-theme="t3-light"] {
   color-scheme: light;
-  /* Base colors - neutral light greys */
-  --color-base-100: oklch(0.99 0.004 250);
-  --color-base-200: oklch(0.96 0.006 250);
-  --color-base-300: oklch(0.9 0.01 250);
-  --color-base-content: oklch(0.18 0.02 260);
-  /* Primary - blue accent for emphasis */
-  --color-primary: oklch(0.63 0.18 255);
+  --color-base-100: oklch(0.985 0.004 90);
+  --color-base-200: oklch(0.96 0.008 90);
+  --color-base-300: oklch(0.91 0.01 90);
+  --color-base-content: oklch(0.2 0.02 260);
+  --color-primary: oklch(0.55 0.18 70);
   --color-primary-content: oklch(0.99 0 0);
-  /* Secondary - light grey for secondary surfaces */
-  --color-secondary: oklch(0.94 0.006 250);
-  --color-secondary-content: oklch(0.22 0.03 260);
-  /* Accent - subtle blue-tinted chips */
-  --color-accent: oklch(0.85 0.06 255);
-  --color-accent-content: oklch(0.2 0.03 260);
-  /* Neutral */
-  --color-neutral: oklch(0.55 0.02 260);
-  --color-neutral-content: oklch(0.18 0.02 260);
-  /* Semantic colors */
-  --color-info: oklch(0.55 0.15 250);
+  --color-secondary: oklch(0.93 0.01 90);
+  --color-secondary-content: oklch(0.25 0.03 260);
+  --color-accent: oklch(0.5 0.12 165);
+  --color-accent-content: oklch(0.99 0 0);
+  --color-neutral: oklch(0.5 0.02 260);
+  --color-neutral-content: oklch(0.2 0.02 260);
+  --color-info: oklch(0.55 0.14 250);
   --color-info-content: oklch(0.99 0 0);
-  --color-success: oklch(0.6 0.15 150);
+  --color-success: oklch(0.55 0.18 145);
   --color-success-content: oklch(0.99 0 0);
-  --color-warning: oklch(0.8 0.15 70);
-  --color-warning-content: oklch(0.2 0.015 280);
-  --color-error: oklch(0.55 0.2 20);
+  --color-warning: oklch(0.65 0.15 70);
+  --color-warning-content: oklch(0.2 0.02 70);
+  --color-error: oklch(0.55 0.2 25);
   --color-error-content: oklch(0.99 0 0);
-  --radius-box: 0.625rem;
+  --radius-box: 0.75rem;
   --radius-field: 0.5rem;
+  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "DM Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 * {
-  font-family: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-body);
 }
 
+.font-display,
 .font-logo {
-  font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-display);
 }
 
 html {
   scroll-behavior: smooth;
 }
 
-/* Theme-aware body background */
 body {
   min-height: 100vh;
-  transition: background-color 0.3s ease, background-image 0.3s ease;
+  transition: background-color 0.35s ease, background-image 0.35s ease;
 }
 
 [data-theme="t3-dark"] body {
-  background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9) 0, transparent 60%), oklch(0.17 0.02 250);
+  background:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 120% 80% at 50% -20%, oklch(0.25 0.04 70 / 0.4), transparent 50%),
+    oklch(0.12 0.015 260);
 }
 
 [data-theme="t3-light"] body {
-  background: linear-gradient(180deg, oklch(0.99 0.004 250), oklch(0.96 0.006 250));
+  background:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E"),
+    linear-gradient(180deg, oklch(0.99 0.006 90), oklch(0.96 0.01 90));
 }
 
-/* Card hover - subtle lift like reference */
+/* Card hover — lift + shadow */
 .card-hover-shine {
   position: relative;
   overflow: hidden;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 .card-hover-shine:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px -12px oklch(0 0 0 / 0.4);
 }
 
-/* Tinder-style action button pulse */
+[data-theme="t3-light"] .card-hover-shine:hover {
+  box-shadow: 0 16px 40px -12px oklch(0 0 0 / 0.15);
+}
+
 @keyframes like-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.1);
-    opacity: 0.9;
-  }
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.92; }
 }
 .action-pulse:hover {
-  animation: like-pulse 0.4s ease-in-out;
+  animation: like-pulse 0.35s ease-in-out;
 }
 
-/* Bottom nav safe area for mobile */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-up {
+  animation: fade-up 0.5s ease-out forwards;
+}
+
+/* Grain overlay for atmosphere */
+.grain-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.035;
+}
+[data-theme="t3-light"] .grain-overlay {
+  opacity: 0.025;
+}
+
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom, 0);
 }

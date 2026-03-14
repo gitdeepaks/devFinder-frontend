@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer className="footer footer-center bg-linear-to-r from-base-300 via-base-200 to-base-300 text-base-content border-t border-base-content/10 shadow-lg fixed bottom-0 w-full z-50 py-6 px-4 sm:px-6">
+    <footer className="footer footer-center bg-gradient-to-r from-base-300 via-base-200 to-base-300 text-base-content border-t border-base-content/10 shadow-lg py-6 px-4 sm:px-6">
       <aside className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
         <div className="flex items-center gap-3">
           <svg

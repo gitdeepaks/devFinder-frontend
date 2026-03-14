@@ -43,7 +43,8 @@ const Body = () => {
   }, [userData]);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative">
+      <div className="fixed inset-0 pointer-events-none z-0 grain-overlay mix-blend-soft-light" aria-hidden />
       <Helmet>
         <title>{meta.title}</title>
         <meta name="description" content={meta.description} />
@@ -56,16 +57,16 @@ const Body = () => {
       </Helmet>
       <a
         href="#main-content"
-        className="absolute left-[-9999px] w-px h-px overflow-hidden focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:w-auto focus:h-auto focus:overflow-visible focus:rounded focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-content focus:outline-none focus:ring-2"
+        className="absolute left-[-9999px] w-px h-px overflow-hidden focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:w-auto focus:h-auto focus:overflow-visible focus:rounded focus:bg-primary focus:px-4 focus:py-2 focus:text-primary-content focus:outline-none focus:ring-2"
       >
         Skip to main content
       </a>
       {showAppShell && <Navbar />}
       <main
         id="main-content"
-        className={`flex-1 ${showBottomNav ? 'pb-20' : ''}`}
+        className={`flex-1 relative z-10 ${showBottomNav ? 'pb-20' : ''}`}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5 sm:py-8">
           <Outlet />
         </div>
       </main>

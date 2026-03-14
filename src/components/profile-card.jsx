@@ -30,8 +30,8 @@ export const ProfileCard = ({ user }) => {
   }, [isPremium, user.membershipExpiryDate]);
 
   return (
-    <div className="card card-hover-shine bg-base-100 rounded-3xl shadow-xl border border-base-300/50 overflow-hidden">
-      <figure className="relative aspect-square max-h-80 bg-linear-to-br from-base-200 to-base-300">
+    <div className="card card-hover-shine bg-base-100 rounded-3xl shadow-xl border border-base-300/60 overflow-hidden">
+      <figure className="relative aspect-square max-h-80 bg-gradient-to-br from-base-200 to-base-300">
         {photoUrl && !imageError ? (
           <>
             <img
@@ -59,7 +59,7 @@ export const ProfileCard = ({ user }) => {
             </div>
           </div>
         )}
-        <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-linear-to-t from-base-100 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-base-100 to-transparent" />
 
         {isPremium && (
           <div className="absolute top-4 right-4">
@@ -86,7 +86,7 @@ export const ProfileCard = ({ user }) => {
       <div className="card-body p-6">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="card-title text-xl font-bold text-base-content">{fullName}</h2>
+            <h2 className="card-title font-display text-xl font-bold text-base-content">{fullName}</h2>
             <p className="text-sm text-base-content/70">{emailId}</p>
           </div>
           {isPremium && premiumExpiryText && (

@@ -1,5 +1,6 @@
 import { toast } from "@pheralb/toast";
 import axios from "axios";
+import { motion } from "framer-motion";
 import { memo, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { BASE_URL } from "../utils/contstants";
@@ -7,11 +8,16 @@ import { addFeed } from "../utils/feed-slice";
 import { UserCard } from "./user-card";
 
 const EmptyFeedState = memo(() => (
-	<div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
-		<div className="w-24 h-24 rounded-full bg-base-200/80 flex items-center justify-center mb-4">
+	<motion.div
+		className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center"
+		initial={{ opacity: 0, y: 12 }}
+		animate={{ opacity: 1, y: 0 }}
+		transition={{ duration: 0.4 }}
+	>
+		<div className="w-24 h-24 rounded-2xl bg-base-200/80 flex items-center justify-center mb-5">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				className="h-12 w-12 text-primary/50"
+				className="h-12 w-12 text-primary/60"
 				fill="none"
 				viewBox="0 0 24 24"
 				stroke="currentColor"
@@ -25,14 +31,14 @@ const EmptyFeedState = memo(() => (
 				/>
 			</svg>
 		</div>
-		<h2 className="text-xl font-bold text-base-content">
+		<h2 className="font-display text-xl font-bold text-base-content">
 			No one left to discover
 		</h2>
-		<p className="mt-2 text-base-content/60 max-w-sm">
+		<p className="mt-2 text-base-content/60 max-w-sm font-medium">
 			Check back later for new developers. You can also update your profile to
 			get more matches.
 		</p>
-	</div>
+	</motion.div>
 ));
 
 const FeedInner = () => {
@@ -80,12 +86,17 @@ const FeedInner = () => {
 
 	if (isLoading) {
 		return (
-			<div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
+			<motion.div
+				className="flex flex-col items-center justify-center min-h-[60vh] px-4"
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				transition={{ duration: 0.3 }}
+			>
 				<span className="loading loading-spinner loading-lg text-primary" />
-				<p className="mt-4 text-base-content/60 font-medium">
+				<p className="mt-4 text-base-content/60 font-semibold">
 					Finding developers…
 				</p>
-			</div>
+			</motion.div>
 		);
 	}
 
@@ -94,16 +105,21 @@ const FeedInner = () => {
 	}
 
 	return (
-		<div className="py-4 sm:py-6">
-			<div className="max-w-md mx-auto mb-4 text-center">
-				<p className="inline-flex items-center gap-2 rounded-full bg-base-200/70 px-3 py-1 text-[11px] font-medium text-base-content/70 mb-2">
-					<span className="inline-block h-1.5 w-1.5 rounded-full bg-success" />
+		<motion.div
+			className="py-4 sm:py-6"
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			transition={{ duration: 0.35 }}
+		>
+			<div className="max-w-md mx-auto mb-5 text-center">
+				<p className="inline-flex items-center gap-2 rounded-full bg-base-200/80 px-3 py-1.5 text-xs font-semibold text-base-content/80 mb-3">
+					<span className="inline-block h-2 w-2 rounded-full bg-success animate-pulse" />
 					Discover developers nearby
 				</p>
-				<h1 className="text-xl font-semibold text-base-content">
+				<h1 className="font-display text-xl sm:text-2xl font-bold text-base-content tracking-tight">
 					Swipe to find your next dev match
 				</h1>
-				<p className="text-xs sm:text-sm text-base-content/60 mt-1">
+				<p className="text-xs sm:text-sm text-base-content/60 mt-1.5 font-medium">
 					Heart to connect, cross to pass. One card at a time.
 				</p>
 			</div>
@@ -111,7 +127,7 @@ const FeedInner = () => {
 				user={currentUser}
 				key={currentUser._id || currentUser.id || "current-user"}
 			/>
-		</div>
+		</motion.div>
 	);
 };
 

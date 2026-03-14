@@ -271,9 +271,9 @@ export const EditProfile = () => {
         </div>
 
         <div className="lg:col-span-2">
-          <div className="card bg-base-100 shadow-xl rounded-3xl border border-base-300/50 overflow-hidden">
+          <div className="card bg-base-100 shadow-xl rounded-3xl border border-base-300/60 overflow-hidden">
             <div className="card-body p-6 sm:p-8">
-              <h1 className="text-2xl font-bold mb-6">Edit Profile</h1>
+              <h1 className="font-display text-2xl font-bold mb-6">Edit Profile</h1>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* First Name */}
